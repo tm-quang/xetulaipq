@@ -7,9 +7,9 @@ import Link from "next/link";
 import { useSearchParams, redirect } from "next/navigation";
 import { MdCheckCircle, MdArrowBack } from "react-icons/md";
 import { format, differenceInDays, parseISO } from "date-fns";
-import { useMemo } from "react";
+import { useMemo, Suspense } from "react";
 
-export default function BookingPage() {
+function BookingContent() {
   const searchParams = useSearchParams();
   const car_id = searchParams.get('car_id');
   const startStr = searchParams.get('start');
@@ -17,20 +17,20 @@ export default function BookingPage() {
 
   const car = useMemo(() => mockCars.find(c => c.id === car_id), [car_id]);
 
-  if (!car) {
-    return redirect('/cars');
-  }
-
   const { startDate, endDate, days } = useMemo(() => {
     try {
       const start = startStr ? parseISO(startStr) : null;
       const end = endStr ? parseISO(endStr) : null;
       const d = (start && end) ? Math.max(1, differenceInDays(end, start)) : 0;
       return { startDate: start, endDate: end, days: d };
-    } catch (e) {
+    } catch {
       return { startDate: null, endDate: null, days: 0 };
     }
   }, [startStr, endStr]);
+
+  if (!car) {
+    return redirect('/cars');
+  }
 
   const totalPrice = days * (car.discount_price || car.price_per_day);
 
@@ -181,5 +181,13 @@ export default function BookingPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function BookingPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Đang tải biểu mẫu đặt xe...</div>}>
+      <BookingContent />
+    </Suspense>
   );
 }

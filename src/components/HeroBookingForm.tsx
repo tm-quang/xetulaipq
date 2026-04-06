@@ -4,7 +4,7 @@ import { useState } from "react";
 import { format } from "date-fns";
 import { HiCalendar, HiUser, HiPhone, HiPaperAirplane, HiChevronDown } from "react-icons/hi";
 import { FaCar } from "react-icons/fa";
-import { LuHouse, LuGift, LuCircleUserRound } from "react-icons/lu";
+import { LuCircleUserRound } from "react-icons/lu";
 import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 

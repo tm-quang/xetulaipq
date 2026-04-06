@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { HiLocationMarker, HiPhone, HiMail, HiArrowRight } from "react-icons/hi";
 import { BsFacebook, BsYoutube, BsTiktok } from "react-icons/bs";
-import Image from "next/image";
+
 
 export default function Footer() {
   return (

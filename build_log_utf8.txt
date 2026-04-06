@@ -1,0 +1,92 @@
+﻿
+> app@0.1.0 build
+> next build
+
+  Γû▓ Next.js 14.2.35
+
+   Creating an optimized production build ...
+ Γ£ô Compiled successfully
+   Linting and checking validity of types ...
+node.exe : 
+At line:1 char:1
++ & "C:\Program 
+Files\nodejs/node.exe" "C:\
+Users\minhq\AppData\Roaming
+\ ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~
+    + CategoryInfo         
+     : NotSpecified: (:St  
+  ring) [], RemoteExcept   
+ ion
+    + FullyQualifiedErrorI 
+   d : NativeCommandError
+ 
+Failed to compile.
+
+./src/app/booking/page.tsx
+24:40  Error: React Hook 
+"useMemo" is called 
+conditionally. React Hooks 
+must be called in the 
+exact same order in every 
+component render.  
+react-hooks/rules-of-hooks
+30:14  Error: 'e' is 
+defined but never used.  @t
+ypescript-eslint/no-unused-
+vars
+
+./src/components/DateTimePi
+ckerModal.tsx
+7:126  Error: 
+'differenceInDays' is 
+defined but never used.  @t
+ypescript-eslint/no-unused-
+vars
+96:47  Error: Unexpected 
+any. Specify a different 
+type.  @typescript-eslint/n
+o-explicit-any
+99:47  Error: Unexpected 
+any. Specify a different 
+type.  @typescript-eslint/n
+o-explicit-any
+
+./src/components/Footer.tsx
+4:8  Error: 'Image' is 
+defined but never used.  @t
+ypescript-eslint/no-unused-
+vars
+
+./src/components/Header.tsx
+5:23  Error: 'HiHome' is 
+defined but never used.  @t
+ypescript-eslint/no-unused-
+vars
+5:31  Error: 'HiTruck' is 
+defined but never used.  @t
+ypescript-eslint/no-unused-
+vars
+5:40  Error: 'HiGift' is 
+defined but never used.  @t
+ypescript-eslint/no-unused-
+vars
+
+./src/components/HeroBookin
+gForm.tsx
+7:10  Error: 'LuHouse' is 
+defined but never used.  @t
+ypescript-eslint/no-unused-
+vars
+7:19  Error: 'LuGift' is 
+defined but never used.  @t
+ypescript-eslint/no-unused-
+vars
+
+info  - Need to disable 
+some ESLint rules? Learn 
+more here: https://nextjs.o
+rg/docs/basic-features/esli
+nt#disabling-rules

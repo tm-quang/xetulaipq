@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { HiMenu, HiX, HiHome, HiTruck, HiGift, HiInformationCircle, HiClock, HiUserAdd, HiLogin } from "react-icons/hi";
+import { HiMenu, HiX, HiInformationCircle, HiClock, HiUserAdd, HiLogin } from "react-icons/hi";
 import { FaCar } from "react-icons/fa";
 import { LuHouse, LuGift, LuMap } from "react-icons/lu";
 import { cn } from "@/lib/utils";

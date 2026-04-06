@@ -4,7 +4,7 @@ import { useState, useEffect, useMemo } from "react"
 import { createPortal } from "react-dom"
 import { motion, AnimatePresence } from "framer-motion"
 import { HiX, HiChevronDown } from "react-icons/hi"
-import { format, addMonths, startOfMonth, endOfMonth, eachDayOfInterval, isSameDay, isToday, startOfToday, isWithinInterval, differenceInDays } from "date-fns"
+import { format, addMonths, startOfMonth, endOfMonth, eachDayOfInterval, isSameDay, isToday, startOfToday, isWithinInterval } from "date-fns"
 import { vi } from "date-fns/locale"
 
 interface DateTimePickerModalProps {
@@ -17,8 +17,8 @@ interface DateTimePickerModalProps {
 
 export default function DateTimePickerModal({ isOpen, onClose, onConfirm, initialStartDate, initialEndDate }: DateTimePickerModalProps) {
   const [tab, setTab] = useState<"day" | "hour">("day")
-  const [startDate, setStartDate] = useState<Date>(initialStartDate || addMonths(new Date(), 0))
-  const [endDate, setEndDate] = useState<Date>(initialEndDate || addMonths(new Date(), 0))
+  const [startDate, setStartDate] = useState<Date | undefined>(initialStartDate || addMonths(new Date(), 0))
+  const [endDate, setEndDate] = useState<Date | undefined>(initialEndDate || addMonths(new Date(), 0))
   const [startTime, setStartTime] = useState("14:00")
   const [endTime, setEndTime] = useState("12:00")
 
@@ -93,10 +93,10 @@ export default function DateTimePickerModal({ isOpen, onClose, onConfirm, initia
                   onClick={() => {
                     if (!startDate || (startDate && endDate)) {
                       setStartDate(day)
-                      setEndDate(undefined as any) // Temporarily reset end
-                    } else if (day < startDate) {
+                      setEndDate(undefined) // Temporarily reset end
+                    } else if (day < startDate!) {
                       setStartDate(day)
-                      setEndDate(undefined as any)
+                      setEndDate(undefined)
                     } else {
                       setEndDate(day)
                     }
@@ -297,8 +297,13 @@ export default function DateTimePickerModal({ isOpen, onClose, onConfirm, initia
                 )}
               </div>
               <button
-                onClick={() => onConfirm({ startDate, endDate, startTime, endTime })}
-                className="w-full md:w-auto bg-primary hover:bg-primary/90 text-white font-black px-12 py-4 rounded-2xl shadow-xl shadow-primary/25 transition active:scale-[0.98] uppercase"
+                disabled={!startDate || !endDate}
+                onClick={() => {
+                  if (startDate && endDate) {
+                    onConfirm({ startDate, endDate, startTime, endTime })
+                  }
+                }}
+                className={`w-full md:w-auto bg-primary hover:bg-primary/90 text-white font-black px-12 py-4 rounded-2xl shadow-xl shadow-primary/25 transition uppercase ${(!startDate || !endDate) ? "opacity-50 cursor-not-allowed" : "active:scale-[0.98]"}`}
               >
                 Tiếp tục
               </button>

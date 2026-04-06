@@ -34,7 +34,18 @@ export default function HeroBookingForm() {
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    router.push('/cars');
+    if (activeTab === "self-drive") {
+      // Xử lý logic cho Xe Tự Lái
+      router.push('/cars');
+    } else {
+      // Xử lý logic cho Thuê Dài Hạn
+      if (!contact.name || !contact.phone) {
+        alert("Vui lòng nhập đầy đủ thông tin Họ Tên và Số điện thoại!");
+        return;
+      }
+      alert(`Đã nhận yêu cầu thuê xe dài hạn!\nTên: ${contact.name}\nSĐT: ${contact.phone}\nThời gian: Từ ${format(dateTime.startDate, "dd/MM")} đến ${format(dateTime.endDate, "dd/MM")}`);
+      // router.push('/cars-driver');
+    }
   };
 
   return (
@@ -44,7 +55,7 @@ export default function HeroBookingForm() {
         <div className="flex md:inline-flex w-full md:w-auto bg-white rounded-t-[20px] md:rounded-t-[24px] overflow-hidden shadow-[0_-10px_20px_rgba(0,0,0,0.03)] relative z-20 -mb-[1px]">
           <button
             onClick={() => setActiveTab("self-drive")}
-            className={`flex-1 md:flex-none px-2 sm:px-4 md:px-12 py-5 md:py-5 font-extrabold text-sm sm:text-xs md:text-base transition-all flex items-center justify-center gap-1.5 md:gap-2 uppercase tracking-wider
+            className={`flex-1 md:flex-none px-2 sm:px-4 md:px-12 py-5 md:py-4 font-extrabold text-sm sm:text-xs md:text-base transition-all flex items-center justify-center gap-1.5 md:gap-2 uppercase tracking-wider
               ${activeTab === "self-drive" ? "bg-[#18A14D] text-white" : "bg-white text-gray-500 hover:bg-gray-50"}`}
           >
             <LuCircleUserRound size={18} className={activeTab === "self-drive" ? "text-white" : "text-gray-500"} />
@@ -52,7 +63,7 @@ export default function HeroBookingForm() {
           </button>
           <button
             onClick={() => setActiveTab("with-driver")}
-            className={`flex-1 md:flex-none px-2 sm:px-4 md:px-12 py-5 md:py-5 font-extrabold text-sm sm:text-xs md:text-base transition-all flex items-center justify-center gap-1.5 md:gap-2 uppercase tracking-wider
+            className={`flex-1 md:flex-none px-2 sm:px-4 md:px-12 py-5 md:py-4 font-extrabold text-sm sm:text-xs md:text-base transition-all flex items-center justify-center gap-1.5 md:gap-2 uppercase tracking-wider
               ${activeTab === "with-driver" ? "bg-[#18A14D] text-white" : "bg-white text-gray-500 hover:bg-gray-50"}`}
           >
             <FaCar size={18} className={activeTab === "with-driver" ? "text-white" : "text-gray-500"} />

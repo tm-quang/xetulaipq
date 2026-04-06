@@ -36,69 +36,71 @@ export default function Header() {
   ];
 
   return (
-    <header
-      className={cn(
-        "fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b",
-        isScrolled
-          ? "bg-white/95 backdrop-blur-md border-gray-200 shadow-sm"
-          : "bg-white border-transparent"
-      )}
-    >
-      <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-        {/* Left Toggle (Mobile only) */}
-        <button
-          className="md:hidden p-2 text-gray-700 -ml-2 hover:bg-gray-100 rounded-full transition"
-          onClick={() => setIsMobileMenuOpen(true)}
-        >
-          <HiMenu size={26} />
-        </button>
-
-        {/* Logo */}
-        <Link href="/" className="flex items-center gap-2 text-primary font-bold text-2xl tracking-tighter md:ml-0">
-          <span className="text-gray-900">XẾ</span>
-          <span className="bg-primary text-white px-2 py-0.5 rounded-lg text-md">TỰ LÁI</span>
-        </Link>
-
-        {/* Desktop Nav */}
-        <nav className="hidden md:flex items-center gap-8 font-semibold text-base">
-          {menuItems.slice(1, 4).map((item) => (
-            <Link key={item.name} href={item.href} className="text-gray-600 hover:text-primary transition-colors">
-              {item.name}
-            </Link>
-          ))}
-        </nav>
-
-        {/* Auth Actions (Desktop) */}
-        <div className="hidden md:flex items-center gap-5">
-          <Link
-            href="/my-bookings"
-            className="text-sm font-semibold text-gray-700 hover:text-primary transition-colors flex items-center gap-1.5"
+    <>
+      <header
+        className={cn(
+          "fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b",
+          isScrolled
+            ? "bg-white/95 backdrop-blur-md border-gray-200 shadow-sm"
+            : "bg-white border-transparent"
+        )}
+      >
+        <div className="container mx-auto px-4 h-16 flex items-center justify-between">
+          {/* Left Toggle (Mobile only) */}
+          <button
+            className="md:hidden p-2 text-gray-700 -ml-2 hover:bg-gray-100 rounded-full transition"
+            onClick={() => setIsMobileMenuOpen(true)}
           >
-            <HiClock size={19} className="text-gray-400" />
-            Chuyến đi
+            <HiMenu size={26} />
+          </button>
+
+          {/* Logo */}
+          <Link href="/" className="flex items-center gap-2 text-primary font-bold text-2xl tracking-tighter md:ml-0">
+            <span className="text-gray-900">XẾ</span>
+            <span className="bg-primary text-white px-2 py-0.5 rounded-lg text-md">TỰ LÁI</span>
           </Link>
-          <div className="h-4 w-px bg-gray-200" />
-          <div className="flex items-center gap-3">
+
+          {/* Desktop Nav */}
+          <nav className="hidden md:flex items-center gap-8 font-semibold text-base">
+            {menuItems.slice(1, 4).map((item) => (
+              <Link key={item.name} href={item.href} className="text-gray-600 hover:text-primary transition-colors">
+                {item.name}
+              </Link>
+            ))}
+          </nav>
+
+          {/* Auth Actions (Desktop) */}
+          <div className="hidden md:flex items-center gap-5">
             <Link
-              href="/register"
-              className="text-sm font-bold text-gray-800 hover:text-primary transition-colors"
+              href="/my-bookings"
+              className="text-sm font-semibold text-gray-700 hover:text-primary transition-colors flex items-center gap-1.5"
             >
-              Đăng ký
+              <HiClock size={19} className="text-gray-400" />
+              Chuyến đi
             </Link>
-            <Link
-              href="/login"
-              className="bg-primary text-white px-5 py-2 rounded-full font-bold text-sm hover:bg-primary/90 shadow-md shadow-primary/10 transition active:scale-95"
-            >
-              Đăng nhập
-            </Link>
+            <div className="h-4 w-px bg-gray-200" />
+            <div className="flex items-center gap-3">
+              <Link
+                href="/register"
+                className="text-sm font-bold text-gray-800 hover:text-primary transition-colors"
+              >
+                Đăng ký
+              </Link>
+              <Link
+                href="/login"
+                className="bg-primary text-white px-5 py-2 rounded-full font-bold text-sm hover:bg-primary/90 shadow-md shadow-primary/10 transition active:scale-95"
+              >
+                Đăng nhập
+              </Link>
+            </div>
           </div>
+
+          {/* Placeholder to balance mobile header */}
+          <div className="w-8 md:hidden" />
         </div>
+      </header>
 
-        {/* Placeholder to balance mobile header */}
-        <div className="w-8 md:hidden" />
-      </div>
-
-      {/* Mobile Sidebar & Backdrop */}
+      {/* Mobile Sidebar & Backdrop OUTSIDE OF HEADER */}
       <AnimatePresence>
         {isMobileMenuOpen && (
           <>
@@ -108,7 +110,7 @@ export default function Header() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setIsMobileMenuOpen(false)}
-              className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[60]"
+              className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[9998]"
             />
 
             {/* Sidebar */}
@@ -117,9 +119,9 @@ export default function Header() {
               animate={{ x: 0 }}
               exit={{ x: "-100%" }}
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className="fixed top-0 left-0 bottom-0 w-[280px] bg-white z-[70] shadow-2xl flex flex-col"
+              className="fixed top-0 left-0 bottom-0 w-[280px] bg-white z-[9999] shadow-2xl flex flex-col"
             >
-              <div className="p-5 flex items-center justify-between border-b">
+              <div className="p-5 flex items-center justify-between border-b bg-white">
                 <Link href="/" onClick={() => setIsMobileMenuOpen(false)} className="flex items-center gap-2 text-primary font-bold text-2xl tracking-tighter">
                   <span className="text-gray-900">XẾ</span>
                   <span className="bg-primary text-white px-2 py-0.5 rounded-lg text-md">TỰ LÁI</span>
@@ -132,7 +134,7 @@ export default function Header() {
                 </button>
               </div>
 
-              <div className="flex-1 overflow-y-auto p-4 space-y-1">
+              <div className="flex-1 overflow-y-auto p-4 space-y-1 bg-white relative">
                 {menuItems.map((item) => (
                   <Link
                     key={item.href}
@@ -148,7 +150,7 @@ export default function Header() {
                 ))}
               </div>
 
-              <div className="p-4 border-t bg-gray-50/50 space-y-3">
+              <div className="p-4 border-t bg-gray-50/50 space-y-3 relative z-10">
                 <Link
                   onClick={() => setIsMobileMenuOpen(false)}
                   href="/register"
@@ -170,6 +172,6 @@ export default function Header() {
           </>
         )}
       </AnimatePresence>
-    </header>
+    </>
   );
 }

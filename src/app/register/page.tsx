@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { HiOutlineMail, HiOutlineLockClosed, HiOutlineUser, HiOutlinePhone } from "react-icons/hi";
-import { FcGoogle } from "react-icons/fc";
 import { useState } from "react";
 import Image from "next/image";
 

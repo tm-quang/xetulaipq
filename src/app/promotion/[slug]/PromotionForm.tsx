@@ -26,6 +26,7 @@ export default function PromotionForm({ promotionTitle }: { promotionTitle: stri
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
+      <input type="hidden" name="promotion_title" value={promotionTitle} />
       {isSuccess && (
         <div className="bg-[#18A14D]/10 text-[#18A14D] px-4 py-3 rounded-xl text-sm font-bold border border-[#18A14D]/20">
           🎉 Đăng ký thành công! Chúng tôi sẽ liên hệ sớm.

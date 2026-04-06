@@ -22,7 +22,38 @@ export default function CarDetailClient({ car }: { car: Car }) {
     startTime: "14:00",
     endTime: "12:00",
   });
-  const [location, setLocation] = useState("Nhập điểm nhận xe");
+  const [location, setLocation] = useState("");
+  const [voucher, setVoucher] = useState("");
+  const [appliedVoucher, setAppliedVoucher] = useState<{ code: string; type: 'fixed' | 'percent' | 'freeship'; value: number } | null>(null);
+  const [voucherError, setVoucherError] = useState("");
+
+  const locations = [
+    "Sân bay Phú Quốc",
+    "Cảng Bãi Vòng",
+    "Cảng An Thới",
+    "Vinpearl / Grand World",
+    "Thị trấn Dương Đông",
+    "Phường An Thới",
+    "Bãi Ông Lang"
+  ];
+
+  const handleApplyVoucher = () => {
+    setVoucherError("");
+    const code = voucher.trim().toUpperCase();
+    if (!code) return;
+
+    // Mock vouchers
+    if (code === "PQ50") {
+      setAppliedVoucher({ code, type: 'fixed', value: 50000 });
+    } else if (code === "GET10") {
+      setAppliedVoucher({ code, type: 'percent', value: 10 });
+    } else if (code === "FREESHIP") {
+      setAppliedVoucher({ code, type: 'freeship', value: 0 });
+    } else {
+      setVoucherError("Mã voucher không hợp lệ hoặc đã hết hạn");
+      setAppliedVoucher(null);
+    }
+  };
 
   // Lock body scroll when zoom modal is open
   useEffect(() => {
@@ -37,12 +68,31 @@ export default function CarDetailClient({ car }: { car: Car }) {
   }, [isZoomed, isModalOpen]);
 
   const rentalDays = useMemo(() => {
-    // Basic day calculation, min 1 day.
     const start = startOfDay(dateTime.startDate);
     const end = startOfDay(dateTime.endDate);
     const days = differenceInDays(end, start);
     return Math.max(1, days);
   }, [dateTime]);
+
+  const deliveryFee = appliedVoucher?.type === 'freeship' ? 0 : 0; // Currently all are free, but prepared for future
+
+  const { discountAmount, finalTotal } = useMemo(() => {
+    const baseTotal = rentalDays * car.price_per_day;
+    let discount = 0;
+    
+    if (appliedVoucher) {
+      if (appliedVoucher.type === 'fixed') {
+        discount = appliedVoucher.value;
+      } else if (appliedVoucher.type === 'percent') {
+        discount = (baseTotal * appliedVoucher.value) / 100;
+      }
+    }
+    
+    return {
+      discountAmount: discount,
+      finalTotal: Math.max(0, baseTotal + deliveryFee - discount)
+    };
+  }, [rentalDays, car.price_per_day, appliedVoucher, deliveryFee]);
 
   const totalPrice = rentalDays * car.price_per_day;
 
@@ -172,8 +222,8 @@ export default function CarDetailClient({ car }: { car: Car }) {
                 </div>
 
                 <div className="space-y-3">
-                  <label className="block text-[10px] text-gray-400 font-black uppercase tracking-widest ml-1">Địa điểm giao nhận</label>
-                  <div className="relative group">
+                  <label className="block text-[10px] text-gray-400 font-black uppercase tracking-widest ml-1">Địa điểm nhận (giao) xe</label>
+                  <div className="relative group mb-3">
                     <input
                       type="text"
                       list="locations-detail"
@@ -184,9 +234,52 @@ export default function CarDetailClient({ car }: { car: Car }) {
                     />
                     <HiLocationMarker className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-300 group-focus-within:text-[#18A14D] transition-colors" size={20} />
                     <datalist id="locations-detail">
-                      <option value="Nhập điểm nhận xe" />
-                      <option value="Nhập điểm trả xe" />
+                      {locations.map(loc => <option key={loc} value={loc} />)}
                     </datalist>
+                  </div>
+                  
+                  <div className="flex flex-wrap gap-2 mb-4">
+                    {locations.slice(0, 4).map(loc => (
+                      <button 
+                        key={loc}
+                        type="button"
+                        onClick={() => setLocation(loc)}
+                        className={`text-[10px] font-bold px-3 py-1.5 rounded-lg border transition-all ${location === loc ? 'bg-[#18A14D] border-[#18A14D] text-white' : 'bg-white border-gray-100 text-gray-500 hover:border-[#18A14D]/30'}`}
+                      >
+                        {loc}
+                      </button>
+                    ))}
+                  </div>
+
+                  <div className="space-y-3 pt-4 border-t border-gray-50">
+                    <label className="block text-[10px] text-gray-400 font-black uppercase tracking-widest ml-1">Mã Voucher (Nếu có)</label>
+                    <div className="flex gap-2">
+                       <div className="relative flex-1 group">
+                          <input
+                            type="text"
+                            value={voucher}
+                            onChange={(e) => setVoucher(e.target.value)}
+                            placeholder="Nhập mã giảm giá..."
+                            className="w-full border-none rounded-2xl bg-gray-50/80 p-4 font-black text-gray-800 text-sm focus:ring-4 focus:ring-[#18A14D]/10 focus:bg-white transition h-14"
+                          />
+                       </div>
+                       <button 
+                        type="button"
+                        onClick={handleApplyVoucher}
+                        className="bg-gray-100 hover:bg-gray-200 text-gray-600 font-black px-4 rounded-2xl text-xs transition-colors h-14 uppercase tracking-tighter"
+                       >
+                        Áp dụng
+                       </button>
+                    </div>
+                    {voucherError && <p className="text-[10px] text-red-500 font-bold ml-1">{voucherError}</p>}
+                    {appliedVoucher && (
+                      <div className="flex items-center justify-between bg-[#18A14D]/5 border border-[#18A14D]/10 rounded-xl px-4 py-2">
+                        <span className="text-[10px] font-black text-[#18A14D] uppercase">Đã áp dụng: {appliedVoucher.code}</span>
+                        <button onClick={() => setAppliedVoucher(null)} className="text-[#18A14D]">
+                          <HiX size={14} />
+                        </button>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
@@ -196,19 +289,25 @@ export default function CarDetailClient({ car }: { car: Car }) {
                   <span>Giá thuê ({rentalDays} ngày)</span>
                   <span className="text-gray-900 font-black">{formatCurrencyVND(totalPrice)}</span>
                 </div>
-                <div className="flex justify-between font-bold text-gray-500 mb-6 text-xs tracking-tight uppercase">
+                <div className="flex justify-between font-bold text-gray-500 mb-4 text-xs tracking-tight uppercase">
                   <span>Phí giao xe</span>
-                  <span className="text-[#18A14D] font-black">Miễn phí</span>
+                  <span className="text-[#18A14D] font-black">{deliveryFee > 0 ? formatCurrencyVND(deliveryFee) : 'Miễn phí'}</span>
                 </div>
+                {appliedVoucher && (
+                  <div className="flex justify-between font-bold text-[#18A14D] mb-4 text-xs tracking-tight uppercase bg-[#18A14D]/5 p-2 rounded-lg border border-[#18A14D]/10">
+                    <span>Voucher ({appliedVoucher.code})</span>
+                    <span className="font-black">-{formatCurrencyVND(discountAmount)}</span>
+                  </div>
+                )}
                 <div className="h-px bg-gray-100 mb-6" />
                 <div className="flex justify-between items-center">
                   <span className="font-black text-sm text-gray-900 uppercase tracking-widest">Tổng cộng</span>
-                  <span className="font-black text-2xl text-gray-900 tracking-tighter">{formatCurrencyVND(totalPrice)}</span>
+                  <span className="font-black text-2xl text-gray-900 tracking-tighter">{formatCurrencyVND(finalTotal)}</span>
                 </div>
               </div>
 
               <Link
-                href={`/booking?car_id=${car.id}&days=${rentalDays}&start=${dateTime.startDate.toISOString()}&end=${dateTime.endDate.toISOString()}`}
+                href={`/booking?car_id=${car.id}&days=${rentalDays}&start=${dateTime.startDate.toISOString()}&end=${dateTime.endDate.toISOString()}&location=${encodeURIComponent(location)}&voucher=${appliedVoucher?.code || ''}`}
                 className={car.available ? "block w-full bg-[#18A14D] hover:bg-[#158c42] text-white text-center font-black py-5 rounded-2xl shadow-[0_15px_35px_rgba(24,161,77,0.3)] transition-all active:scale-[0.98] uppercase tracking-widest text-base" : "block w-full bg-gray-200 text-gray-400 text-center font-black py-5 rounded-2xl cursor-not-allowed uppercase tracking-widest text-base pointer-events-none"}
               >
                 ĐẶT XE NGAY

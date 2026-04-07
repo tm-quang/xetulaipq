@@ -35,16 +35,19 @@ export default function HeroBookingForm() {
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (activeTab === "self-drive") {
-      // Xử lý logic cho Xe Tự Lái
-      router.push('/cars');
+      const searchParams = new URLSearchParams({
+        start: dateTime.startDate.toISOString(),
+        end: dateTime.endDate.toISOString(),
+        start_time: dateTime.startTime,
+        end_time: dateTime.endTime,
+      });
+      router.push(`/cars?${searchParams.toString()}`);
     } else {
-      // Xử lý logic cho Thuê Dài Hạn
       if (!contact.name || !contact.phone) {
         alert("Vui lòng nhập đầy đủ thông tin Họ Tên và Số điện thoại!");
         return;
       }
       alert(`Đã nhận yêu cầu thuê xe dài hạn!\nTên: ${contact.name}\nSĐT: ${contact.phone}\nThời gian: Từ ${format(dateTime.startDate, "dd/MM")} đến ${format(dateTime.endDate, "dd/MM")}`);
-      // router.push('/cars-driver');
     }
   };
 
@@ -145,7 +148,7 @@ export default function HeroBookingForm() {
               className="w-full h-[56px] md:h-[70px] bg-[#18A14D] hover:bg-[#158c42] text-white font-extrabold px-4 rounded-xl md:rounded-2xl shadow-[0_10px_20px_rgba(24,161,77,0.2)] transition-all active:scale-[0.98] flex items-center justify-center gap-2 whitespace-nowrap uppercase tracking-widest text-md md:text-md"
             >
               <HiPaperAirplane className="rotate-45" size={18} />
-              Gửi Yêu Cầu
+              Tìm xe
             </button>
           </div>
         </div>

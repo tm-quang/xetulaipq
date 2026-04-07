@@ -7,14 +7,41 @@ import { HiSearch, HiCalendar, HiAdjustments, HiChevronDown } from "react-icons/
 import DateTimePickerModal from "@/components/DateTimePickerModal";
 import { format } from "date-fns";
 
+import { useSearchParams } from "next/navigation";
+import { useMemo, useEffect } from "react";
+import { isCarAvailable } from "@/lib/utils";
+import { mockBookings, mockCarUnits } from "@/lib/data";
+import { parseISO } from "date-fns";
+
 export default function CarsListingPage() {
+  const searchParams = useSearchParams();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [dateTime, setDateTime] = useState({
-    startDate: new Date(),
-    endDate: new Date(new Date().setDate(new Date().getDate() + 1)),
-    startTime: "14:00",
-    endTime: "12:00",
-  });
+  
+  const initialDates = useMemo(() => {
+    const startStr = searchParams.get('start');
+    const endStr = searchParams.get('end');
+    const startTime = searchParams.get('start_time') || "14:00";
+    const endTime = searchParams.get('end_time') || "12:00";
+    
+    return {
+      startDate: startStr ? parseISO(startStr) : new Date(),
+      endDate: endStr ? parseISO(endStr) : new Date(new Date().setDate(new Date().getDate() + 1)),
+      startTime,
+      endTime
+    };
+  }, [searchParams]);
+
+  const [dateTime, setDateTime] = useState(initialDates);
+
+  useEffect(() => {
+    setDateTime(initialDates);
+  }, [initialDates]);
+
+  const availableCars = useMemo(() => {
+    return mockCars.filter(car => 
+      isCarAvailable(car, mockCarUnits, mockBookings, dateTime.startDate, dateTime.endDate)
+    );
+  }, [dateTime]);
 
   const handleConfirmDateTime = (data: typeof dateTime) => {
     setDateTime(data);
@@ -126,7 +153,7 @@ export default function CarsListingPage() {
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-6">
               <div>
                 <p className="text-gray-400 font-bold uppercase tracking-[0.2em] text-xs mb-1">Kết quả tìm kiếm</p>
-                <h2 className="text-3xl font-black text-gray-900 uppercase tracking-tight">Hiển thị <span className="text-[#18A14D]">{mockCars.length}</span> xe phù hợp</h2>
+                <h2 className="text-3xl font-black text-gray-900 uppercase tracking-tight">Hiển thị <span className="text-[#18A14D]">{availableCars.length}</span> xe phù hợp</h2>
               </div>
               
               <div className="flex items-center gap-3 bg-gray-50 p-1.5 rounded-2xl border border-gray-100">
@@ -140,7 +167,7 @@ export default function CarsListingPage() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 gap-4 md:gap-8">
-              {mockCars.map((car) => (
+              {availableCars.map((car) => (
                 <CarCard key={car.id} car={car} />
               ))}
             </div>

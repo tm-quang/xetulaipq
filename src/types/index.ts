@@ -19,10 +19,20 @@ export type Car = {
   terms?: string[];
 };
 
+export type CarUnit = {
+  id: string;
+  car_id: string;
+  color: string;
+  color_code?: string;
+  plate_number: string;
+  status: 'available' | 'maintenance' | 'retired';
+};
+
 export type Booking = {
   id: string;
   user_id: string;
   car_id: string;
+  unit_id?: string;
   start_date: string;
   end_date: string;
   pickup_location: string;

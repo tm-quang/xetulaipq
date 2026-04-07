@@ -1,105 +1,72 @@
 "use client";
 
-import { useState } from "react";
-import { HiOutlineUpload, HiOutlineTrash, HiOutlineSearch, HiOutlineFolder, HiOutlinePhotograph, HiOutlineStar } from "react-icons/hi";
+import { AdminCard, AdminButton } from "@/components/admin/UI";
+import { HiOutlineSearch, HiOutlineUpload, HiOutlineTrash, HiOutlinePhotograph, HiOutlineEye } from "react-icons/hi";
+import toast from "react-hot-toast";
 
 export default function MediaManagement() {
-  const [media, setMedia] = useState([
-    { id: 1, name: "vf3-phu-quoc.jpg", type: "image", size: "1.2 MB", date: "2026-04-06", url: "/images/vf3/vf3.jpg", category: "Xe" },
-    { id: 2, name: "vf5-blue.png", type: "image", size: "2.4 MB", date: "2026-04-05", url: "/images/vf5/vf5.png", category: "Xe" },
-    { id: 3, name: "hero-slide-1.jpg", type: "image", size: "3.1 MB", date: "2026-04-06", url: "/images/hero-slide/hero-slide (1).jpg", category: "Banner" },
-    { id: 4, name: "mpv7-exterior.jpg", type: "image", size: "1.8 MB", date: "2026-04-04", url: "/images/mpv7/mpv7.jpg", category: "Xe" },
-    { id: 5, name: "booking-success.svg", type: "vector", size: "0.2 MB", date: "2026-04-03", url: "/images/mpv7/mpv7-1.jpg", category: "UI" },
-  ]);
+  const images = [
+    { id: 1, url: "https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?q=80&w=1470&auto=format&fit=crop", name: "banner-hero-1.jpg", size: "1.2 MB", date: "01/04/2026" },
+    { id: 2, url: "https://images.unsplash.com/photo-1575936123452-b67c3203c357?q=80&w=1470&auto=format&fit=crop", name: "car-vf3-red.png", size: "850 KB", date: "02/04/2026" },
+    { id: 3, url: "https://images.unsplash.com/photo-1660634629768-4ad01ba0379c?q=80&w=1470&auto=format&fit=crop", name: "gallery-1.jpg", size: "2.4 MB", date: "03/04/2026" },
+    { id: 4, url: "https://images.unsplash.com/photo-1533473359331-0135ef1b58bd?q=80&w=1470&auto=format&fit=crop", name: "profile-placeholder.jpg", size: "120 KB", date: "04/04/2026" },
+  ];
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 animate-in fade-in duration-500 pb-20">
       {/* Page Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-gray-100">
         <div>
-          <h1 className="text-2xl font-black text-white tracking-tight underline decoration-[#18A14D]/40 decoration-4 underline-offset-4">Quản lý Media</h1>
-          <p className="text-gray-500 text-sm font-medium">Tải lên và quản trị toàn bộ tài nguyên hình ảnh, video của website.</p>
+          <h1 className="text-3xl font-black text-gray-900 tracking-tight uppercase leading-none mb-3">Thư viện truyền thông</h1>
+          <p className="text-sm font-bold text-gray-400 uppercase tracking-widest leading-none">Quản lý hình ảnh và tập tin của website</p>
         </div>
-        <button className="bg-[#18A14D] hover:bg-[#158c41] text-white font-black px-6 py-3 rounded-2xl flex items-center gap-2 transition-all shadow-lg shadow-[#18A14D]/20 active:scale-95 text-sm">
+        <AdminButton onClick={() => toast.success("Đang mở trình tải lên tập tin...")}>
           <HiOutlineUpload size={20} />
-          TẢI LÊN FILE
-        </button>
+          TẢI TẬP TIN LÊN
+        </AdminButton>
       </div>
 
-      {/* Media Browser Interface */}
-      <div className="grid grid-cols-1 xl:grid-cols-4 gap-8">
-        {/* Sidebar Browser */}
-        <div className="xl:col-span-1 space-y-6">
-           <div className="bg-white/5 border border-white/10 rounded-[32px] p-6">
-              <h3 className="text-sm font-black text-white uppercase tracking-widest mb-6">Thư mục</h3>
-              <div className="space-y-2">
-                 {[
-                   { label: "Tất cả", count: 42, icon: HiOutlineFolder, active: true },
-                   { label: "Hình ảnh xe", count: 18, icon: HiOutlinePhotograph },
-                   { label: "Banner & Slide", count: 5, icon: HiOutlineStar },
-                   { label: "Blog & Feedback", count: 12, icon: HiOutlineFolder },
-                   { label: "UI Assets", count: 7, icon: HiOutlineFolder },
-                 ].map((folder, idx) => (
-                   <button key={idx} className={`w-full flex items-center justify-between px-4 py-3 rounded-xl transition-all ${
-                     folder.active ? "bg-[#18A14D]/15 text-[#18A14D]" : "text-gray-400 hover:bg-white/5 hover:text-white"
-                   }`}>
-                      <div className="flex items-center gap-3">
-                         <folder.icon size={18} />
-                         <span className="text-sm font-bold">{folder.label}</span>
-                      </div>
-                      <span className="text-[10px] font-black opacity-50">{folder.count}</span>
-                   </button>
-                 ))}
-              </div>
-           </div>
-           
-           <div className="bg-[#18A14D]/5 border border-[#18A14D]/10 rounded-[32px] p-6">
-              <h3 className="text-sm font-black text-[#18A14D] uppercase tracking-widest mb-2">Bộ nhớ</h3>
-              <div className="flex justify-between text-xs mb-2">
-                 <span className="text-gray-400 font-bold">124.5 MB / 500 MB</span>
-                 <span className="text-[#18A14D] font-black">25%</span>
-              </div>
-              <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
-                 <div className="h-full bg-[#18A14D] w-[25%] rounded-full" />
-              </div>
-           </div>
+      <AdminCard className="p-4 overflow-visible">
+        <div className="relative group w-full">
+           <HiOutlineSearch className="absolute left-6 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[#18A14D] transition-colors" size={20} />
+           <input 
+            type="text" 
+            placeholder="Tìm kiếm theo tên tập tin..." 
+            className="w-full bg-gray-50 border border-gray-100 rounded-2xl pl-14 pr-6 py-4 text-sm font-bold text-gray-900 focus:outline-none focus:border-[#18A14D]/50 transition shadow-sm"
+          />
         </div>
+      </AdminCard>
 
-        {/* Media Grid */}
-        <div className="xl:col-span-3 space-y-6">
-           <div className="bg-white/5 border border-white/10 rounded-[32px] p-4 flex gap-4">
-              <div className="relative flex-1 group">
-                 <HiOutlineSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-[#18A14D] transition-colors" size={20} />
-                 <input 
-                  type="text" 
-                  placeholder="Tìm theo tên file..." 
-                  className="w-full bg-white/5 border border-white/10 rounded-2xl pl-12 pr-4 py-3 text-sm text-white focus:outline-none focus:border-[#18A14D]/50 focus:bg-white/10 transition"
-                />
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+        {images.map((img) => (
+          <div key={img.id} className="bg-white border border-gray-100 rounded-[32px] overflow-hidden group shadow-sm hover:shadow-2xl hover:border-[#18A14D]/20 transition-all hover:-translate-y-2 relative">
+            <div className="aspect-square bg-gray-50 overflow-hidden relative">
+              <img src={img.url} alt={img.name} className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-700" />
+              <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3 scale-90 group-hover:scale-100 transition-transform">
+                <AdminButton variant="secondary" size="icon" className="w-10 h-10 rounded-xl bg-white/20 backdrop-blur-md text-white hover:bg-white hover:text-[#18A14D] border-none">
+                  <HiOutlineEye size={20} />
+                </AdminButton>
+                <AdminButton variant="danger" size="icon" className="w-10 h-10 rounded-xl bg-red-500 text-white hover:bg-red-600 border-none shadow-xl shadow-red-500/30" onClick={() => toast.success("Đã xóa tập tin khỏi thư viện")}>
+                  <HiOutlineTrash size={20} />
+                </AdminButton>
               </div>
-           </div>
+            </div>
+            <div className="p-5">
+              <p className="text-[11px] font-black text-gray-900 truncate uppercase tracking-tight mb-2 leading-none">{img.name}</p>
+              <div className="flex justify-between items-center text-[9px] font-black text-gray-400 uppercase tracking-widest leading-none">
+                <span>{img.size}</span>
+                <span>{img.date}</span>
+              </div>
+            </div>
+          </div>
+        ))}
 
-           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-              {media.map((file) => (
-                <div key={file.id} className="bg-white/5 border border-white/10 rounded-[32px] overflow-hidden group hover:border-[#18A14D]/40 transition-all relative">
-                   <div className="aspect-square relative bg-gray-900 border-b border-white/5">
-                      <img src={file.url} alt={file.name} className="object-cover w-full h-full opacity-80 group-hover:opacity-100 transition duration-500 group-hover:scale-110" />
-                      <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition transition-delay-75">
-                         <button className="p-2 rounded-lg bg-red-500/80 text-white backdrop-blur-sm hover:bg-red-500 shadow-xl">
-                            <HiOutlineTrash size={14} />
-                         </button>
-                      </div>
-                   </div>
-                   <div className="p-4">
-                      <h4 className="text-[11px] font-black text-white truncate uppercase tracking-widest">{file.name}</h4>
-                      <div className="flex justify-between items-center mt-1 text-[10px] text-gray-500 font-bold">
-                         <span>{file.size}</span>
-                         <span className="px-2 py-0.5 bg-white/5 rounded-md">{file.category}</span>
-                      </div>
-                   </div>
-                </div>
-              ))}
-           </div>
-        </div>
+        <button className="aspect-square bg-gray-50 border-2 border-dashed border-gray-200 rounded-[32px] flex flex-col items-center justify-center gap-3 text-gray-300 hover:border-[#18A14D] hover:bg-green-50 hover:text-[#18A14D] transition-all group">
+          <div className="w-16 h-16 rounded-full bg-white border border-gray-100 flex items-center justify-center shadow-sm group-hover:shadow-md transition-all">
+            <HiOutlinePhotograph size={32} />
+          </div>
+          <span className="text-[10px] font-black uppercase tracking-widest">Thả tập tin tại đây</span>
+        </button>
       </div>
     </div>
   );

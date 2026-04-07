@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Roboto } from "next/font/google";
+import { Toaster } from "react-hot-toast";
 import "../globals.css";
 
 const roboto = Roboto({
@@ -19,7 +20,8 @@ export const metadata: Metadata = {
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="vi">
-      <body className={`${roboto.className} bg-[#0f1117]`}>
+      <body className={`${roboto.className} bg-gray-50 text-gray-900`}>
+        <Toaster position="top-right" />
         {children}
       </body>
     </html>

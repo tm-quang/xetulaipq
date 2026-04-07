@@ -32,7 +32,7 @@ export default function Header() {
     { name: "Tìm xe", href: "/cars", icon: FaCar },
     { name: "Khuyến mãi", href: "/promotion", icon: LuGift },
     { name: "Về chúng tôi", href: "/about", icon: HiInformationCircle },
-    { name: "Chuyến đi", href: "/my-bookings", icon: LuMap },
+    { name: "Chuyến đi", href: "/trips", icon: LuMap },
   ];
 
   return (
@@ -72,7 +72,7 @@ export default function Header() {
           {/* Auth Actions (Desktop) */}
           <div className="hidden md:flex items-center gap-5">
             <Link
-              href="/my-bookings"
+              href="/trips"
               className="text-sm font-semibold text-gray-700 hover:text-primary transition-colors flex items-center gap-1.5"
             >
               <HiClock size={19} className="text-gray-400" />

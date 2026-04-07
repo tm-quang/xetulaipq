@@ -7,8 +7,10 @@ import Link from "next/link";
 import { useSearchParams, redirect } from "next/navigation";
 import { MdCheckCircle, MdArrowBack } from "react-icons/md";
 import { format, differenceInDays, parseISO } from "date-fns";
-import { useMemo, Suspense, useState, useEffect } from "react";
+import { useMemo, Suspense, useState, useEffect, useCallback } from "react";
 import { HiLocationMarker, HiX } from "react-icons/hi";
+
+import AvailabilityCalendar from "@/components/booking/AvailabilityCalendar";
 
 function BookingContent() {
   const searchParams = useSearchParams();
@@ -52,7 +54,7 @@ function BookingContent() {
     "Bãi Ông Lang"
   ];
 
-  const handleApplyVoucher = (codeStr?: string) => {
+  const handleApplyVoucher = useCallback((codeStr?: string) => {
     setVoucherError("");
     const code = (codeStr || voucher).trim().toUpperCase();
     if (!code) return;
@@ -67,15 +69,16 @@ function BookingContent() {
       setVoucherError("Mã voucher không hợp lệ");
       setAppliedVoucher(null);
     }
-  };
+  }, [voucher]);
 
   useEffect(() => {
     if (searchParams.get('voucher')) {
       handleApplyVoucher(searchParams.get('voucher') || "");
     }
-  }, [searchParams]);
+  }, [searchParams, handleApplyVoucher]);
 
   const { discountAmount, finalTotal } = useMemo(() => {
+    if (!car) return { discountAmount: 0, finalTotal: 0 };
     const baseTotal = days * (car.discount_price || car.price_per_day);
     let discount = 0;
     if (appliedVoucher) {
@@ -83,7 +86,7 @@ function BookingContent() {
       else if (appliedVoucher.type === 'percent') discount = (baseTotal * appliedVoucher.value) / 100;
     }
     return { discountAmount: discount, finalTotal: Math.max(0, baseTotal - discount) };
-  }, [days, car.discount_price, car.price_per_day, appliedVoucher]);
+  }, [days, car, appliedVoucher]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -103,19 +106,31 @@ function BookingContent() {
   const totalPrice = days * (car.discount_price || car.price_per_day);
 
   return (
-    <div className="bg-white min-h-screen py-10 md:py-20">
-      <div className="container mx-auto px-4 max-w-6xl">
+    <div className="bg-white min-h-screen py-10 md:py-24">
+      <div className="container mx-auto px-4 max-w-7xl">
         {/* Header with back button */}
-        <div className="flex items-center gap-3 mb-8">
-           <Link href={`/cars/thue-xe/${car.slug}`} className="w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center text-gray-400 hover:bg-gray-100 transition-colors">
-              <MdArrowBack size={20} />
-           </Link>
-           <div className="bg-[#18A14D]/5 px-4 py-2 rounded-xl border border-[#18A14D]/10">
-              <h1 className="text-lg md:text-3xl font-black uppercase tracking-tight text-[#18A14D] leading-none">XÁC NHẬN ĐẶT XE</h1>
-           </div>
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
+          <div className="flex items-center gap-3">
+            <Link href={`/cars/thue-xe/${car.slug}`} className="w-12 h-12 rounded-2xl bg-gray-50 flex items-center justify-center text-gray-500 hover:bg-gray-100 transition-colors shadow-sm">
+                <MdArrowBack size={24} />
+            </Link>
+            <div className="bg-[#18A14D]/5 px-6 py-3 rounded-2xl border border-[#18A14D]/10">
+                <h1 className="text-xl md:text-3xl font-black uppercase tracking-tight text-[#18A14D] leading-none mb-1">XÁC NHẬN ĐẶT XE</h1>
+                <p className="text-[10px] font-bold text-[#18A14D] opacity-70 uppercase tracking-widest leading-none">Chỉ còn vài bước nữa để bắt đầu chuyến đi</p>
+            </div>
+          </div>
+          <div className="flex items-center gap-4 px-6 py-3 bg-blue-50 border border-blue-100 rounded-2xl">
+             <div className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
+             <span className="text-[11px] font-black text-blue-600 uppercase tracking-widest">Hệ thống đang kết nối trực tiếp...</span>
+          </div>
+        </div>
+
+        {/* Calendar View - Full Width */}
+        <div className="mb-20">
+           <AvailabilityCalendar carId={car.id} />
         </div>
         
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
           {/* Customer Form - 7 cols */}
           <div className="lg:col-span-7 bg-white rounded-[32px] p-6 md:p-12 shadow-[0_20px_60px_rgba(0,0,0,0.05)] border border-gray-50">
             <h2 className="text-base font-black mb-8 text-gray-900 uppercase tracking-widest border-b border-gray-50 pb-4">Thông tin liên hệ</h2>

@@ -4,8 +4,10 @@ import { useState, useEffect, useMemo } from "react"
 import { createPortal } from "react-dom"
 import { motion, AnimatePresence } from "framer-motion"
 import { HiX, HiChevronDown } from "react-icons/hi"
-import { format, addMonths, startOfMonth, endOfMonth, eachDayOfInterval, isSameDay, isToday, startOfToday, isWithinInterval } from "date-fns"
+import { format, addMonths, startOfMonth, endOfMonth, eachDayOfInterval, isSameDay, isToday, startOfToday, isWithinInterval, parseISO } from "date-fns"
 import { vi } from "date-fns/locale"
+
+import { mockBookings, mockCarUnits } from "@/lib/data"
 
 interface DateTimePickerModalProps {
   isOpen: boolean
@@ -13,14 +15,30 @@ interface DateTimePickerModalProps {
   onConfirm: (data: { startDate: Date; endDate: Date; startTime: string; endTime: string }) => void
   initialStartDate?: Date
   initialEndDate?: Date
+  carId?: string
 }
 
-export default function DateTimePickerModal({ isOpen, onClose, onConfirm, initialStartDate, initialEndDate }: DateTimePickerModalProps) {
+export default function DateTimePickerModal({ 
+  isOpen, 
+  onClose, 
+  onConfirm, 
+  initialStartDate, 
+  initialEndDate,
+  carId 
+}: DateTimePickerModalProps) {
   const [tab, setTab] = useState<"day" | "hour">("day")
-  const [startDate, setStartDate] = useState<Date | undefined>(initialStartDate || addMonths(new Date(), 0))
-  const [endDate, setEndDate] = useState<Date | undefined>(initialEndDate || addMonths(new Date(), 0))
+  const [startDate, setStartDate] = useState<Date | undefined>(initialStartDate)
+  const [endDate, setEndDate] = useState<Date | undefined>(initialEndDate)
   const [startTime, setStartTime] = useState("14:00")
   const [endTime, setEndTime] = useState("12:00")
+
+  // Sync state with props when modal opens
+  useEffect(() => {
+    if (isOpen) {
+      setStartDate(initialStartDate);
+      setEndDate(initialEndDate);
+    }
+  }, [isOpen, initialStartDate, initialEndDate]);
 
   // Lock body scroll when modal is open
   useEffect(() => {
@@ -36,15 +54,34 @@ export default function DateTimePickerModal({ isOpen, onClose, onConfirm, initia
 
   const today = startOfToday()
 
-  // Generate current and next month references robustly
   const currentMonthDate = new Date();
-  currentMonthDate.setDate(1); // Ensure we are at start of month to avoid overflow
-
+  currentMonthDate.setDate(1); 
   const nextMonthDate = new Date(currentMonthDate);
   nextMonthDate.setMonth(nextMonthDate.getMonth() + 1);
 
   const currentMonth = startOfMonth(currentMonthDate);
   const nextMonth = startOfMonth(nextMonthDate);
+
+  const getDayAvailability = (day: Date) => {
+    if (!carId) return { status: 'none', units: [] };
+    
+    const units = mockCarUnits.filter(u => u.car_id === carId && u.status === 'available');
+    const bookings = mockBookings.filter(b => b.car_id === carId && b.status !== 'cancelled');
+
+    const bookedUnits = bookings
+      .filter(b => {
+        const start = parseISO(b.start_date);
+        const end = parseISO(b.end_date);
+        return isWithinInterval(day, { start, end });
+      })
+      .map(b => b.unit_id);
+
+    const availableUnits = units.filter(u => !bookedUnits.includes(u.id));
+    return { 
+      status: availableUnits.length === 0 ? 'full' : 'available', 
+      units: availableUnits 
+    };
+  };
 
   const renderCalendar = (monthDate: Date) => {
     const days = eachDayOfInterval({
@@ -52,49 +89,50 @@ export default function DateTimePickerModal({ isOpen, onClose, onConfirm, initia
       end: endOfMonth(monthDate)
     })
 
-    const startDayOfWeek = (days[0].getDay() + 6) % 7 // Convert Sun-Sat (0-6) to Mon-Sun (0-6)
+    const startDayOfWeek = (days[0].getDay() + 6) % 7
     const emptyDays = Array.from({ length: startDayOfWeek })
 
     return (
       <div className="flex-none w-full md:w-[calc(50%-1.25rem)] snap-center">
-        <h3 className="text-center font-bold text-gray-800 mb-4">
-          Tháng {format(monthDate, "M", { locale: vi })}
+        <h3 className="text-center font-bold text-gray-800 mb-6 uppercase tracking-widest text-xs opacity-50">
+          Tháng {format(monthDate, "MM / yyyy", { locale: vi })}
         </h3>
-        <div className="grid grid-cols-7 gap-1 text-sm">
+        <div className="grid grid-cols-7 gap-1 sm:gap-2 text-sm">
           {["T2", "T3", "T4", "T5", "T6", "T7", "CN"].map((d) => (
-            <div key={d} className="text-center text-gray-400 font-medium h-8 flex items-center justify-center">
+            <div key={d} className="text-center text-gray-400 font-bold h-8 flex items-center justify-center text-[10px]">
               {d}
             </div>
           ))}
           {emptyDays.map((_, i) => (
-            <div key={`empty-${i}`} className="h-10" />
+            <div key={`empty-${i}`} className="h-10 sm:h-12" />
           ))}
           {days.map((day) => {
             const isSelectedStart = startDate && isSameDay(day, startDate)
             const isSelectedEnd = endDate && isSameDay(day, endDate)
-            const isSelectedSingle = isSelectedStart && isSelectedEnd
             const isInRange = startDate && endDate && isWithinInterval(day, { start: startDate, end: endDate }) && !isSelectedStart && !isSelectedEnd
+            const { status, units } = getDayAvailability(day);
+            const isPastDay = day < today;
+            const isFull = status === 'full';
 
             return (
-              <div key={day.toString()} className="relative w-full h-10 flex items-center justify-center">
-                {/* Range connecting background layer */}
-                {(isInRange || (isSelectedStart && !isSelectedSingle) || (isSelectedEnd && !isSelectedSingle)) && (
+              <div key={day.toString()} className="relative w-full h-10 sm:h-12 flex items-center justify-center">
+                {(isInRange || (isSelectedStart && endDate) || (isSelectedEnd && startDate)) && (
                   <div
-                    className={`absolute inset-y-1.5 bg-[#E8F5E9] z-0
-                      ${isSelectedStart && !isSelectedEnd ? 'left-1/2 right-[-2px]' : ''}
-                      ${isSelectedEnd && !isSelectedStart ? 'right-1/2 left-[-2px]' : ''}
-                      ${isInRange ? 'inset-x-[-2px]' : ''}
+                    className={`absolute inset-y-2 bg-[#E8F5E9] z-0
+                      ${isSelectedStart ? 'left-1/2 right-[-4px]' : ''}
+                      ${isSelectedEnd ? 'right-1/2 left-[-4px]' : ''}
+                      ${isInRange ? 'inset-x-[-4px]' : ''}
                      `}
                   />
                 )}
 
                 <button
-                  disabled={day < today}
+                  disabled={isPastDay || isFull}
                   onClick={() => {
                     if (!startDate || (startDate && endDate)) {
                       setStartDate(day)
-                      setEndDate(undefined) // Temporarily reset end
-                    } else if (day < startDate!) {
+                      setEndDate(undefined)
+                    } else if (day < startDate) {
                       setStartDate(day)
                       setEndDate(undefined)
                     } else {
@@ -102,15 +140,40 @@ export default function DateTimePickerModal({ isOpen, onClose, onConfirm, initia
                     }
                   }}
                   className={`
-                    w-10 h-10 flex items-center justify-center rounded-full transition-all relative z-10
-                    ${day < today ? "text-gray-200 cursor-not-allowed" : "text-gray-700 hover:bg-gray-100"}
-                    ${isSelectedStart || isSelectedEnd ? "bg-[#18A14D] !text-white font-bold" : ""}
-                    ${isInRange ? "font-medium text-[#18A14D]" : ""}
+                    w-10 h-10 sm:w-11 sm:h-11 flex flex-col items-center justify-center rounded-2xl transition-all relative z-10 group
+                    ${isPastDay || isFull ? "text-gray-200 cursor-not-allowed" : "text-gray-700 hover:bg-gray-50"}
+                    ${isSelectedStart || isSelectedEnd ? "bg-[#18A14D] !text-white font-black shadow-lg shadow-[#18A14D]/30" : ""}
+                    ${isInRange ? "font-black text-[#18A14D]" : ""}
+                    ${isFull && !isPastDay ? "bg-red-50/50" : ""}
                   `}
                 >
-                  {format(day, "d")}
-                  {isToday(day) && !isSelectedStart && !isSelectedEnd && (
-                    <div className="absolute bottom-1.5 w-1 h-1 bg-[#18A14D] rounded-full" />
+                  <span className="text-[13px]">{format(day, "d")}</span>
+                  {!isPastDay && units.length > 0 && (
+                    <div className="flex gap-0.5 mt-0.5">
+                      {units.map((u: any) => (
+                        <div 
+                          key={u.id} 
+                          className={`w-1 h-1 rounded-full border border-white/20 shadow-sm ${isSelectedStart || isSelectedEnd ? 'bg-white' : ''}`}
+                          style={{ backgroundColor: isSelectedStart || isSelectedEnd ? undefined : u.color_code }}
+                        />
+                      ))}
+                    </div>
+                  )}
+                  {!isPastDay && isFull && (
+                     <div className="w-1 h-1 bg-red-400 rounded-full mt-0.5" />
+                  )}
+                  {!isPastDay && units.length > 0 && (
+                    <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-24 bg-gray-900 text-white text-[8px] p-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity z-50 pointer-events-none hidden sm:block">
+                       <p className="font-black border-b border-white/10 pb-1 mb-1">CÒN {units.length} XE</p>
+                       <div className="space-y-1">
+                          {units.map((u: any) => (
+                            <div key={u.id} className="flex items-center gap-1">
+                              <div className="w-1 h-1 rounded-full" style={{ backgroundColor: u.color_code }} />
+                              <span>Màu {u.color}</span>
+                            </div>
+                          ))}
+                       </div>
+                    </div>
                   )}
                 </button>
               </div>
@@ -121,7 +184,6 @@ export default function DateTimePickerModal({ isOpen, onClose, onConfirm, initia
     )
   }
 
-  // Sinh options thời gian động
   const availableStartTimes = useMemo(() => {
     const options = [];
     for(let h=0; h<24; h++) {
@@ -129,55 +191,13 @@ export default function DateTimePickerModal({ isOpen, onClose, onConfirm, initia
         options.push(`${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`);
       }
     }
-
-    if (startDate && isToday(startDate)) {
-      const now = new Date();
-      now.setMinutes(now.getMinutes() + 60); // Bỏ qua 60 phút
-
-      const filtered = options.filter(time => {
-        const [h, m] = time.split(':').map(Number);
-        const optionTime = new Date();
-        optionTime.setHours(h, m, 0, 0);
-        return optionTime >= now;
-      });
-      return filtered.length > 0 ? filtered : ["23:30"];
-    }
     return options;
-  }, [startDate]);
+  }, []);
 
   const availableEndTimes = useMemo(() => {
-    const options = [];
-    for(let h=0; h<24; h++) {
-      for(let m=0; m<60; m+=30) {
-        options.push(`${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`);
-      }
-    }
+    return availableStartTimes;
+  }, [availableStartTimes]);
 
-    if (startDate && endDate && isSameDay(startDate, endDate)) {
-       const filtered = options.filter(time => {
-          const [hOptions, mOptions] = time.split(':').map(Number);
-          const [hStart, mStart] = startTime.split(':').map(Number);
-          return (hOptions * 60 + mOptions) > (hStart * 60 + mStart);
-       });
-       return filtered.length > 0 ? filtered : ["23:30"];
-    }
-    return options;
-  }, [startDate, endDate, startTime]);
-
-  // Tự động sửa lại nếu giờ đang chọn nằm trong vùng bị ẩn
-  useEffect(() => {
-    if (availableStartTimes.length > 0 && !availableStartTimes.includes(startTime)) {
-      setStartTime(availableStartTimes[0]);
-    }
-  }, [availableStartTimes, startTime]);
-
-  useEffect(() => {
-    if (availableEndTimes.length > 0 && !availableEndTimes.includes(endTime)) {
-      setEndTime(availableEndTimes[0]);
-    }
-  }, [availableEndTimes, endTime]);
-
-  // Tính tổng số ngày (Block 24h)
   let totalDays = 1;
   if (startDate && endDate) {
     const startDateTime = new Date(startDate);
@@ -192,7 +212,6 @@ export default function DateTimePickerModal({ isOpen, onClose, onConfirm, initia
 
     if (diffHours > 0) {
        totalDays = Math.ceil(diffHours / 24);
-       if(totalDays === 0) totalDays = 1;
     }
   }
 
@@ -213,7 +232,6 @@ export default function DateTimePickerModal({ isOpen, onClose, onConfirm, initia
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             className="bg-white w-full max-w-[700px] rounded-[24px] shadow-2xl relative overflow-hidden flex flex-col max-h-[90vh]"
           >
-            {/* Header */}
             <div className="p-4 md:p-6 border-b flex items-center justify-between gap-2">
               <div className="w-8 md:w-10 flex-shrink-0" />
               <h2 className="text-[15px] sm:text-base md:text-xl font-black text-gray-900 uppercase tracking-tight text-center flex-1 leading-snug">
@@ -224,7 +242,6 @@ export default function DateTimePickerModal({ isOpen, onClose, onConfirm, initia
               </button>
             </div>
 
-            {/* Tab */}
             <div className="flex border-b">
               <button
                 onClick={() => setTab("day")}
@@ -243,7 +260,6 @@ export default function DateTimePickerModal({ isOpen, onClose, onConfirm, initia
             </div>
 
             <div className="flex-1 overflow-y-auto p-6">
-              {/* Time Selection */}
               <div className="grid grid-cols-2 gap-4 mb-8">
                 <div>
                   <label className="block text-xs font-bold text-gray-400 uppercase mb-2 ml-1">Nhận xe</label>
@@ -277,14 +293,12 @@ export default function DateTimePickerModal({ isOpen, onClose, onConfirm, initia
                 </div>
               </div>
 
-              {/* Calendars */}
               <div className="flex flex-row overflow-x-auto snap-x snap-mandatory gap-10 pb-4 -mx-6 px-6 scroll-smooth [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
                 {renderCalendar(currentMonth)}
                 {renderCalendar(nextMonth)}
               </div>
             </div>
 
-            {/* Footer */}
             <div className="p-4 md:p-6 border-t bg-gray-50/50 flex flex-col md:flex-row items-center justify-between gap-4">
               <div className="text-sm text-center md:text-left w-full md:w-auto flex-1">
                 <div className="text-[13px] md:text-sm font-bold text-gray-900 leading-relaxed">

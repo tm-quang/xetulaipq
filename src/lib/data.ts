@@ -1,4 +1,4 @@
-import { Car, Booking, User, Promotion } from '@/types';
+import { Car, Booking, User, Promotion, CarUnit } from '@/types';
 
 export const mockCars: Car[] = [
   {
@@ -148,11 +148,22 @@ export const mockUsers: User[] = [
   }
 ];
 
+export const mockCarUnits: CarUnit[] = [
+  { id: 'unit_vf3_1', car_id: 'car_vf3', color: 'Trắng', color_code: '#FFFFFF', plate_number: '68A-123.45', status: 'available' },
+  { id: 'unit_vf3_2', car_id: 'car_vf3', color: 'Vàng', color_code: '#FFD700', plate_number: '68A-678.90', status: 'available' },
+  { id: 'unit_vf3_3', car_id: 'car_vf3', color: 'Xanh dương', color_code: '#0000FF', plate_number: '68A-456.78', status: 'available' },
+  { id: 'unit_vf5_1', car_id: 'car_vf5', color: 'Đỏ', color_code: '#FF0000', plate_number: '68A-111.11', status: 'available' },
+  { id: 'unit_vf5_2', car_id: 'car_vf5', color: 'Trắng', color_code: '#FFFFFF', plate_number: '68A-222.22', status: 'available' },
+  { id: 'unit_mpv7_1', car_id: 'car_mpv7', color: 'Bạc', color_code: '#C0C0C0', plate_number: '68A-333.33', status: 'available' },
+  { id: 'unit_mpv7_2', car_id: 'car_mpv7', color: 'Đen', color_code: '#000000', plate_number: '68A-444.44', status: 'available' },
+];
+
 export const mockBookings: Booking[] = [
   {
     id: 'bk_1',
     user_id: 'user_1',
     car_id: 'car_vf3',
+    unit_id: 'unit_vf3_1',
     start_date: '2026-04-01T08:00:00Z',
     end_date: '2026-04-03T18:00:00Z',
     pickup_location: 'Sân bay Phú Quốc',
@@ -163,25 +174,63 @@ export const mockBookings: Booking[] = [
   {
     id: 'bk_2',
     user_id: 'user_2',
-    car_id: 'car_vf5',
+    car_id: 'car_vf3',
+    unit_id: 'unit_vf3_2',
     start_date: '2026-04-10T09:00:00Z',
     end_date: '2026-04-12T09:00:00Z',
-    pickup_location: 'Cảng Bãi Vòng',
-    dropoff_location: 'Thị trấn Dương Đông',
-    total_price: 1500000,
+    pickup_location: 'Sân bay Phú Quốc',
+    dropoff_location: 'Sân bay Phú Quốc',
+    total_price: 1000000,
     status: 'confirmed'
   },
   {
     id: 'bk_3',
     user_id: 'user_1',
-    car_id: 'car_mpv7',
-    start_date: '2026-04-20T14:00:00Z',
-    end_date: '2026-04-25T12:00:00Z',
-    pickup_location: 'VinWonders Phú Quốc',
+    car_id: 'car_vf3',
+    unit_id: 'unit_vf3_1',
+    start_date: '2026-04-15T09:00:00Z',
+    end_date: '2026-04-17T09:00:00Z',
+    pickup_location: 'Sân bay Phú Quốc',
     dropoff_location: 'Sân bay Phú Quốc',
-    total_price: 4500000,
-    status: 'pending'
-  }
+    total_price: 1000000,
+    status: 'confirmed'
+  },
+  {
+    id: 'bk_4',
+    user_id: 'user_2',
+    car_id: 'car_vf3',
+    unit_id: 'unit_vf3_3',
+    start_date: '2026-05-01T09:00:00Z',
+    end_date: '2026-05-05T09:00:00Z',
+    pickup_location: 'Sân bay Phú Quốc',
+    dropoff_location: 'Sân bay Phú Quốc',
+    total_price: 2000000,
+    status: 'confirmed'
+  },
+  {
+    id: 'bk_5',
+    user_id: 'user_1',
+    car_id: 'car_vf5',
+    unit_id: 'unit_vf5_1',
+    start_date: '2026-04-10T09:00:00Z',
+    end_date: '2026-04-12T09:00:00Z',
+    pickup_location: 'Sân bay Phú Quốc',
+    dropoff_location: 'Sân bay Phú Quốc',
+    total_price: 1500000,
+    status: 'confirmed'
+  },
+  {
+    id: 'bk_6',
+    user_id: 'user_2',
+    car_id: 'car_vf5',
+    unit_id: 'unit_vf5_2',
+    start_date: '2026-04-15T09:00:00Z',
+    end_date: '2026-04-16T09:00:00Z',
+    pickup_location: 'Sân bay Phú Quốc',
+    dropoff_location: 'Sân bay Phú Quốc',
+    total_price: 750000,
+    status: 'confirmed'
+  },
 ];
 
 export const mockPromotions: Promotion[] = [

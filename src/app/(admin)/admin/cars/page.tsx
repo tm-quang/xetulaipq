@@ -1,116 +1,206 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { supabase } from "@/lib/supabase";
-import { mockCars } from "@/lib/data";
+import { useState } from "react";
 import { formatCurrencyVND } from "@/lib/utils";
-import { HiOutlinePlus, HiOutlinePencil, HiOutlineTrash, HiOutlineSearch } from "react-icons/hi";
+import { mockCars } from "@/lib/data";
+import { AdminCard, AdminTable, AdminBadge, AdminButton, AdminInput, AdminSelect } from "@/components/admin/UI";
+import { AdminModal, AdminConfirmModal } from "@/components/admin/Modal";
+import { HiOutlinePlus, HiOutlinePencil, HiOutlineTrash, HiOutlineSearch, HiOutlineFilter, HiOutlinePhotograph } from "react-icons/hi";
+import toast from "react-hot-toast";
+
+import { Car } from "@/types";
 
 export default function CarManagement() {
-  const [cars, setCars] = useState(mockCars);
+  const [cars, setCars] = useState<Car[]>(mockCars);
   const [searchTerm, setSearchTerm] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+  const [currentCar, setCurrentCar] = useState<Partial<Car> | null>(null);
+  const [carToDelete, setCarToDelete] = useState<Car | null>(null);
 
   const filteredCars = cars.filter(car => 
     car.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  const handleOpenModal = (car: Car | null = null) => {
+    setCurrentCar(car || { name: "", price_per_day: 0, specs: { fuel: "Electric" } as any, available: true, images: [""] });
+    setIsModalOpen(true);
+  };
+
+  const handleSave = () => {
+    if (currentCar) {
+      toast.success(currentCar.id ? "Cập nhật thông tin xe thành công!" : "Thêm xe mới thành công!");
+      setIsModalOpen(false);
+    }
+  };
+
+  const handleDelete = () => {
+    if (carToDelete) {
+      setCars(cars.filter(c => c.id !== carToDelete.id));
+      toast.success(`Đã xóa xe ${carToDelete.name}`);
+      setIsConfirmOpen(false);
+    }
+  };
+
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 animate-in fade-in duration-500">
       {/* Page Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
-          <h1 className="text-2xl font-black text-white tracking-tight underline decoration-[#18A14D]/40 decoration-4 underline-offset-4">Quản lý Xe</h1>
-          <p className="text-gray-500 text-sm">Quản lý danh mục xe cho thuê và thông tin chi tiết.</p>
+          <h1 className="text-3xl font-black text-gray-900 tracking-tight uppercase leading-none mb-3">Danh mục xe</h1>
+          <p className="text-sm font-bold text-gray-400 uppercase tracking-widest leading-none">Quản lý đội xe và thông số kỹ thuật</p>
         </div>
-        <button className="bg-[#18A14D] hover:bg-[#158c41] text-white font-black px-6 py-3 rounded-2xl flex items-center gap-2 transition-all shadow-lg shadow-[#18A14D]/20 active:scale-95">
+        <AdminButton onClick={() => handleOpenModal()}>
           <HiOutlinePlus size={20} />
           THÊM XE MỚI
-        </button>
+        </AdminButton>
       </div>
 
-      {/* Filter & Search */}
-      <div className="bg-white/5 border border-white/10 rounded-[32px] p-4 flex flex-col md:flex-row gap-4 items-center">
-        <div className="relative flex-1 group">
-          <HiOutlineSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-[#18A14D] transition-colors" size={20} />
-          <input 
-            type="text" 
-            placeholder="Tìm kiếm xe..." 
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full bg-white/5 border border-white/10 rounded-2xl pl-12 pr-4 py-3 text-sm text-white focus:outline-none focus:border-[#18A14D]/50 focus:bg-white/10 transition"
+      {/* Filter & Search Bar */}
+      <AdminCard className="p-4">
+        <div className="flex flex-col md:flex-row gap-4 items-center">
+          <div className="relative flex-1 group w-full">
+            <HiOutlineSearch className="absolute left-6 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[#18A14D] transition-colors" size={20} />
+            <input 
+              type="text" 
+              placeholder="Tìm kiếm theo tên xe, mã xe..." 
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full bg-gray-50 border border-gray-100 rounded-2xl pl-14 pr-6 py-4 text-sm font-bold text-gray-900 focus:outline-none focus:border-[#18A14D]/50 focus:bg-white transition-all shadow-sm"
+            />
+          </div>
+          <div className="flex gap-3 w-full md:w-auto">
+            <AdminButton variant="outline" className="flex-1 md:flex-none">
+              <HiOutlineFilter size={18} /> Lọc
+            </AdminButton>
+            <AdminSelect className="min-w-[160px] flex-1 md:flex-none">
+              <option>Tất cả trạng thái</option>
+              <option>Đang sẵn sàng</option>
+              <option>Đang cho thuê</option>
+            </AdminSelect>
+          </div>
+        </div>
+      </AdminCard>
+
+      {/* Table Container */}
+      <AdminCard title={`Danh sách xe (${filteredCars.length})`} subtitle="Thông tin chi tiết và trạng thái xe">
+        <AdminTable headers={["Ảnh", "Tên Xe & Mã", "Loại Máy", "Giá Thuê", "Trạng Thái", "Thao Tác"]}>
+          {filteredCars.map((car) => (
+            <tr key={car.id} className="hover:bg-gray-50/80 transition-colors group">
+              <td className="px-6 py-4">
+                <div className="w-20 h-14 rounded-[18px] bg-gray-100 overflow-hidden relative shadow-sm group-hover:scale-105 transition-transform">
+                  <img src={car.images[0]} alt={car.name} className="object-cover w-full h-full" />
+                </div>
+              </td>
+              <td className="px-6 py-4">
+                <div className="font-black text-gray-900 uppercase tracking-tight text-sm mb-1">{car.name}</div>
+                <div className="text-[10px] text-gray-400 uppercase tracking-widest font-black leading-none">{car.id}</div>
+              </td>
+              <td className="px-6 py-4">
+                <AdminBadge variant={car.specs.fuel === 'Electric' ? 'success' : 'info'}>
+                  {car.specs.fuel === 'Electric' ? 'Xe điện' : 'Xe xăng'}
+                </AdminBadge>
+              </td>
+              <td className="px-6 py-4">
+                <div className="font-black text-gray-900 leading-none">{formatCurrencyVND(car.price_per_day)}</div>
+                <div className="text-[10px] text-gray-400 font-bold uppercase mt-1">mỗi ngày</div>
+              </td>
+              <td className="px-6 py-4">
+                <div className="flex items-center gap-2">
+                   <div className={`w-2 h-2 rounded-full ring-4 ${car.available ? 'bg-[#18A14D] ring-[#18A14D]/10' : 'bg-red-500 ring-red-500/10'}`} />
+                   <span className="font-black text-[11px] uppercase tracking-widest text-gray-500">{car.available ? 'Còn xe' : 'Hết xe'}</span>
+                </div>
+              </td>
+              <td className="px-6 py-4">
+                <div className="flex gap-2">
+                  <AdminButton 
+                    variant="ghost" 
+                    size="icon" 
+                    className="w-9 h-9 text-gray-400 hover:text-[#18A14D] hover:bg-[#18A14D]/5"
+                    onClick={() => handleOpenModal(car)}
+                  >
+                    <HiOutlinePencil size={18} />
+                  </AdminButton>
+                  <AdminButton 
+                    variant="ghost" 
+                    size="icon" 
+                    className="w-9 h-9 text-gray-400 hover:text-red-500 hover:bg-red-50"
+                    onClick={() => { setCarToDelete(car); setIsConfirmOpen(true); }}
+                  >
+                    <HiOutlineTrash size={18} />
+                  </AdminButton>
+                </div>
+              </td>
+            </tr>
+          ))}
+        </AdminTable>
+      </AdminCard>
+
+      {/* Create/Edit Modal */}
+      <AdminModal 
+        isOpen={isModalOpen} 
+        onClose={() => setIsModalOpen(false)} 
+        title={currentCar?.id ? "Chỉnh sửa thông tin xe" : "Thêm xe mới"}
+        size="lg"
+        footer={
+          <>
+            <AdminButton variant="ghost" onClick={() => setIsModalOpen(false)}>Hủy bỏ</AdminButton>
+            <AdminButton onClick={handleSave}>Lưu thông tin</AdminButton>
+          </>
+        }
+      >
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="md:col-span-2">
+            <AdminInput 
+              label="Tên hiển thị" 
+              placeholder="Ví dụ: VinFast VF3 - Special Edition" 
+              value={currentCar?.name}
+              onChange={(e) => setCurrentCar({...currentCar, name: e.target.value})}
+            />
+          </div>
+          <AdminInput 
+            label="Giá thuê (VND/Ngày)" 
+            type="number" 
+            value={currentCar?.price_per_day || 0}
+            onChange={(e) => currentCar && setCurrentCar({...currentCar, price_per_day: Number(e.target.value)})}
           />
+          <AdminSelect 
+            label="Loại động cơ"
+            value={currentCar?.specs?.fuel || "Electric"}
+            onChange={(e) => currentCar && setCurrentCar({...currentCar, specs: { ...currentCar.specs, fuel: e.target.value } as any})}
+          >
+            <option value="Electric">Xe điện (Electric)</option>
+            <option value="Gasoline">Xe xăng (Gasoline)</option>
+          </AdminSelect>
+          <div className="md:col-span-2">
+            <label className="block text-[11px] font-black text-gray-400 uppercase tracking-widest leading-none ml-1 mb-3">Hình ảnh xe</label>
+            <div className="grid grid-cols-4 gap-4">
+               {currentCar?.images?.map((img: string, idx: number) => (
+                 <div key={idx} className="aspect-[4/3] rounded-2xl bg-gray-50 border border-dashed border-gray-200 flex items-center justify-center relative overflow-hidden group">
+                    {img ? (
+                      <img src={img} className="object-cover w-full h-full" alt="" />
+                    ) : (
+                      <HiOutlinePhotograph size={24} className="text-gray-300" />
+                    )}
+                 </div>
+               ))}
+               <button className="aspect-[4/3] rounded-2xl border-2 border-dashed border-gray-200 flex flex-col items-center justify-center gap-1 hover:border-[#18A14D] hover:bg-green-50 transition-all text-gray-400 hover:text-[#18A14D]">
+                  <HiOutlinePlus size={20} />
+                  <span className="text-[9px] font-black uppercase tracking-widest">Thêm ảnh</span>
+               </button>
+            </div>
+          </div>
         </div>
-        <div className="flex gap-2">
-          <select className="bg-white/5 border border-white/10 rounded-2xl px-4 py-3 text-sm text-gray-400 focus:outline-none focus:border-[#18A14D]/50">
-            <option>Tất cả loại xe</option>
-            <option>Xe điện</option>
-            <option>Xe xăng</option>
-          </select>
-          <select className="bg-white/5 border border-white/10 rounded-2xl px-4 py-3 text-sm text-gray-400 focus:outline-none focus:border-[#18A14D]/50">
-            <option>Sắp xếp theo giá</option>
-            <option>Tên xe (A-Z)</option>
-          </select>
-        </div>
-      </div>
+      </AdminModal>
 
-      {/* Car List Table */}
-      <div className="bg-white/5 border border-white/10 rounded-[40px] overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full text-left">
-            <thead>
-              <tr className="bg-white/5 text-gray-500 text-xs font-black uppercase tracking-widest">
-                <th className="px-8 py-5">Ảnh</th>
-                <th className="px-8 py-5">Tên Xe</th>
-                <th className="px-8 py-5">Phân Loại</th>
-                <th className="px-8 py-5">Giá / Ngày</th>
-                <th className="px-8 py-5">Trạng Thái</th>
-                <th className="px-8 py-5">Hành Động</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-white/5 text-sm">
-              {filteredCars.map((car) => (
-                <tr key={car.id} className="hover:bg-white/5 transition-colors group">
-                  <td className="px-8 py-5">
-                    <div className="w-16 h-12 rounded-xl bg-gray-800 overflow-hidden relative">
-                      <img src={car.images[0]} alt={car.name} className="object-cover w-full h-full" />
-                    </div>
-                  </td>
-                  <td className="px-8 py-5">
-                    <div className="font-bold text-white tracking-tight">{car.name}</div>
-                    <div className="text-[10px] text-gray-500 uppercase tracking-widest font-black mt-0.5">{car.slug}</div>
-                  </td>
-                  <td className="px-8 py-5">
-                    <span className={`px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest ${
-                      car.specs.fuel === 'Electric' ? 'bg-green-500/10 text-green-400' : 'bg-blue-500/10 text-blue-400'
-                    }`}>
-                      {car.specs.fuel}
-                    </span>
-                  </td>
-                  <td className="px-8 py-5 font-black text-white">
-                    {formatCurrencyVND(car.price_per_day)}
-                  </td>
-                  <td className="px-8 py-5">
-                    <div className="flex items-center gap-2">
-                       <span className={`w-2 h-2 rounded-full ${car.available ? 'bg-green-500' : 'bg-red-500'}`} />
-                       <span className="font-bold text-xs text-gray-400">{car.available ? 'Còn xe' : 'Hết xe'}</span>
-                    </div>
-                  </td>
-                  <td className="px-8 py-5">
-                    <div className="flex gap-2">
-                      <button className="p-2.5 rounded-xl bg-white/5 text-gray-400 hover:text-[#18A14D] hover:bg-[#18A14D]/5 transition-all">
-                        <HiOutlinePencil size={18} />
-                      </button>
-                      <button className="p-2.5 rounded-xl bg-white/5 text-gray-400 hover:text-red-500 hover:bg-red-500/5 transition-all">
-                        <HiOutlineTrash size={18} />
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
+      {/* Delete Confirmation */}
+      <AdminConfirmModal 
+        isOpen={isConfirmOpen}
+        onClose={() => setIsConfirmOpen(false)}
+        onConfirm={handleDelete}
+        title="Xác nhận xóa xe"
+        message={`Bạn có chắc chắn muốn xóa xe ${carToDelete?.name}? Hành động này không thể hoàn tác.`}
+      />
     </div>
   );
 }

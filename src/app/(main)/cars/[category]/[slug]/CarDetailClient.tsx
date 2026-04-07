@@ -324,6 +324,7 @@ export default function CarDetailClient({ car }: { car: Car }) {
         onClose={() => setIsModalOpen(false)}
         initialStartDate={dateTime.startDate}
         initialEndDate={dateTime.endDate}
+        carId={car.id}
         onConfirm={(data) => {
           setDateTime(data);
           setIsModalOpen(false);

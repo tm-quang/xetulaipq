@@ -2,13 +2,12 @@
 
 import { useState } from "react";
 import { MdCheckCircle } from "react-icons/md";
-import { HiLocationMarker, HiX } from "react-icons/hi";
-import Link from "next/link";
+import { HiLocationMarker } from "react-icons/hi";
 
 export default function PromotionForm({ promotionTitle }: { promotionTitle: string }) {
   const [formData, setFormData] = useState({ name: "", phone: "", location: "" });
   const [voucher, setVoucher] = useState("");
-  const [appliedVoucher, setAppliedVoucher] = useState<any>(null);
+  const [appliedVoucher, setAppliedVoucher] = useState<{ code: string; type: string; value: number } | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
 

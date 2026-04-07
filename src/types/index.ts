@@ -15,6 +15,8 @@ export type Car = {
     fuel: 'Electric' | 'Gasoline' | 'Diesel';
   };
   available: boolean;
+  features?: string[];
+  terms?: string[];
 };
 
 export type Booking = {
@@ -23,6 +25,8 @@ export type Booking = {
   car_id: string;
   start_date: string;
   end_date: string;
+  pickup_location: string;
+  dropoff_location: string;
   total_price: number;
   status: 'pending' | 'confirmed' | 'cancelled' | 'completed';
 };

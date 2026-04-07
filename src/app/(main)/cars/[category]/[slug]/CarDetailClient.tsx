@@ -32,8 +32,11 @@ export default function CarDetailClient({ car }: { car: Car }) {
     "Cảng Bãi Vòng",
     "Cảng An Thới",
     "Vinpearl / Grand World",
-    "Thị trấn Dương Đông",
+    "Thị trấn Hoàng Hôn",
+    "Cáp treo Hòn Thơm",
+    "Phường Dương Đông",
     "Phường An Thới",
+    "Chợ đêm Dương Đông",
     "Bãi Ông Lang"
   ];
 
@@ -79,7 +82,7 @@ export default function CarDetailClient({ car }: { car: Car }) {
   const { discountAmount, finalTotal } = useMemo(() => {
     const baseTotal = rentalDays * car.price_per_day;
     let discount = 0;
-    
+
     if (appliedVoucher) {
       if (appliedVoucher.type === 'fixed') {
         discount = appliedVoucher.value;
@@ -87,7 +90,7 @@ export default function CarDetailClient({ car }: { car: Car }) {
         discount = (baseTotal * appliedVoucher.value) / 100;
       }
     }
-    
+
     return {
       discountAmount: discount,
       finalTotal: Math.max(0, baseTotal + deliveryFee - discount)
@@ -148,12 +151,12 @@ export default function CarDetailClient({ car }: { car: Car }) {
               <div className="content">
                 <h2 className="text-xl font-black mb-5 uppercase tracking-widest text-gray-400">Đặc điểm xe</h2>
                 <ul className="space-y-4">
-                  {[
-                    'Xe điện thông minh, không khí thải',
-                    'Nội thất bọc da cao cấp, sạch sẽ',
-                    'Hỗ trợ đỗ xe tự động, camera 360',
-                    'Pin sạc đầy, vận hành êm ái'
-                  ].map(item => (
+                  {(car.features || [
+                    'Quãng đường di chuyển tối ưu',
+                    'Nội thất bọc da sạch sẽ',
+                    'Xe đời mới, bảo dưỡng định kỳ',
+                    'Tiết kiệm nhiên liệu/điện năng',
+                  ]).map(item => (
                     <li key={item} className="flex items-center gap-3 text-gray-700 font-bold">
                       <div className="w-2 h-2 rounded-full bg-[#18A14D]"></div>
                       {item}
@@ -164,12 +167,11 @@ export default function CarDetailClient({ car }: { car: Car }) {
               <div className="content">
                 <h2 className="text-xl font-black mb-5 uppercase tracking-widest text-gray-400">Điều khoản</h2>
                 <ul className="space-y-4">
-                  {[
-                    'Bảo hiểm vật chất 2 chiều',
+                  {(car.terms || [
                     'Giao nhận tận nơi 24/7',
-                    'Hỗ trợ cứu hộ trên toàn đảo',
-                    'Thủ tục nhanh gọn, không giữ cọc'
-                  ].map(item => (
+                    'Thủ tục nhanh gọn, không giữ cọc',
+                    'Hỗ trợ cứu hộ trên toàn đảo'
+                  ]).map(item => (
                     <li key={item} className="flex items-center gap-3 text-gray-700 font-bold">
                       <div className="w-2 h-2 rounded-full bg-blue-500"></div>
                       {item}
@@ -185,7 +187,7 @@ export default function CarDetailClient({ car }: { car: Car }) {
             <div className="bg-white border border-gray-100 rounded-[32px] p-6 md:p-10 shadow-[0_30px_70px_rgba(0,0,0,0.1)] sticky top-24">
               <div className="mb-8">
                 <span className="bg-[#E8F5E9] text-[#18A14D] px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest inline-block mb-6">
-                  HẾT MỨC KHUYẾN MÃI
+                  KHUYẾN MÃI DÀNH CHO BẠN
                 </span>
                 <div className="flex items-end gap-1 mb-2">
                   <div className="text-sm text-gray-300 font-bold line-through mb-1.5">{formatCurrencyVND(car.price_per_day * 1.1)}</div>
@@ -200,7 +202,7 @@ export default function CarDetailClient({ car }: { car: Car }) {
               <div className="space-y-6 pt-6 border-t border-gray-100 mb-8">
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-3">
-                    <label className="block text-[10px] text-gray-400 font-black uppercase tracking-widest ml-1">Ngày nhận xe</label>
+                    <label className="block text-[10px] text-gray-500 font-black uppercase tracking-widest ml-1">Ngày nhận xe</label>
                     <button
                       onClick={() => setIsModalOpen(true)}
                       className="w-full text-left bg-gray-50/80 hover:bg-gray-100 border border-transparent rounded-2xl p-4 font-black text-gray-800 transition flex items-center justify-between group h-14"
@@ -210,7 +212,7 @@ export default function CarDetailClient({ car }: { car: Car }) {
                     </button>
                   </div>
                   <div className="space-y-3">
-                    <label className="block text-[10px] text-gray-400 font-black uppercase tracking-widest ml-1">Ngày trả xe</label>
+                    <label className="block text-[10px] text-gray-500 font-black uppercase tracking-widest ml-1">Ngày trả xe</label>
                     <button
                       onClick={() => setIsModalOpen(true)}
                       className="w-full text-left bg-gray-50/80 hover:bg-gray-100 border border-transparent rounded-2xl p-4 font-black text-gray-800 transition flex items-center justify-between group h-14"
@@ -222,7 +224,7 @@ export default function CarDetailClient({ car }: { car: Car }) {
                 </div>
 
                 <div className="space-y-3">
-                  <label className="block text-[10px] text-gray-400 font-black uppercase tracking-widest ml-1">Địa điểm nhận (giao) xe</label>
+                  <label className="block text-[10px] text-gray-500 font-black uppercase tracking-widest ml-1">Địa điểm Giao | Nhận xe</label>
                   <div className="relative group mb-3">
                     <input
                       type="text"
@@ -230,17 +232,17 @@ export default function CarDetailClient({ car }: { car: Car }) {
                       value={location}
                       onChange={(e) => setLocation(e.target.value)}
                       placeholder="Chọn nơi nhận xe..."
-                      className="w-full border-none rounded-2xl bg-gray-50/80 p-4 pl-12 font-black text-gray-800 text-sm focus:ring-4 focus:ring-[#18A14D]/10 focus:bg-white transition h-14"
+                      className="w-full border-none rounded-2xl bg-gray-50/80 p-4 pl-12 text-gray-800 text-sm focus:ring-4 focus:ring-[#18A14D]/10 focus:bg-white transition h-14"
                     />
                     <HiLocationMarker className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-300 group-focus-within:text-[#18A14D] transition-colors" size={20} />
                     <datalist id="locations-detail">
                       {locations.map(loc => <option key={loc} value={loc} />)}
                     </datalist>
                   </div>
-                  
+
                   <div className="flex flex-wrap gap-2 mb-4">
                     {locations.slice(0, 4).map(loc => (
-                      <button 
+                      <button
                         key={loc}
                         type="button"
                         onClick={() => setLocation(loc)}
@@ -252,24 +254,24 @@ export default function CarDetailClient({ car }: { car: Car }) {
                   </div>
 
                   <div className="space-y-3 pt-4 border-t border-gray-50">
-                    <label className="block text-[10px] text-gray-400 font-black uppercase tracking-widest ml-1">Mã Voucher (Nếu có)</label>
+                    <label className="block text-[10px] text-gray-500 font-black uppercase tracking-widest ml-1">Mã Voucher (Nếu có)</label>
                     <div className="flex gap-2">
-                       <div className="relative flex-1 group">
-                          <input
-                            type="text"
-                            value={voucher}
-                            onChange={(e) => setVoucher(e.target.value)}
-                            placeholder="Nhập mã giảm giá..."
-                            className="w-full border-none rounded-2xl bg-gray-50/80 p-4 font-black text-gray-800 text-sm focus:ring-4 focus:ring-[#18A14D]/10 focus:bg-white transition h-14"
-                          />
-                       </div>
-                       <button 
+                      <div className="relative flex-1 group">
+                        <input
+                          type="text"
+                          value={voucher}
+                          onChange={(e) => setVoucher(e.target.value)}
+                          placeholder="Nhập mã giảm giá..."
+                          className="w-full border-none rounded-2xl bg-gray-50/80 p-4 text-gray-800 text-sm focus:ring-4 focus:ring-[#18A14D]/10 focus:bg-white transition h-14"
+                        />
+                      </div>
+                      <button
                         type="button"
                         onClick={handleApplyVoucher}
-                        className="bg-gray-100 hover:bg-gray-200 text-gray-600 font-black px-4 rounded-2xl text-xs transition-colors h-14 uppercase tracking-tighter"
-                       >
+                        className="bg-gray-200 hover:bg-primary hover:text-white text-gray-600 font-black px-4 rounded-2xl text-xs transition-colors h-14 uppercase tracking-tighter"
+                      >
                         Áp dụng
-                       </button>
+                      </button>
                     </div>
                     {voucherError && <p className="text-[10px] text-red-500 font-bold ml-1">{voucherError}</p>}
                     {appliedVoucher && (

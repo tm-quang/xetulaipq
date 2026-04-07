@@ -6,39 +6,11 @@ import Link from "next/link";
 import { HiOutlineCalendar, HiOutlineLocationMarker, HiOutlineChevronRight } from "react-icons/hi";
 import { BsCheckCircleFill, BsClockHistory, BsXCircleFill } from "react-icons/bs";
 
-// Giả lập dữ liệu chuyến đi
-const mockTrips = [
-  {
-    id: "TRP-84920",
-    carName: "VinFast VF5 Plus",
-    image: "/images/vf5/vf5.png",
-    startDate: "2026-04-15",
-    endDate: "2026-04-18",
-    status: "upcoming", // upcoming, ongoing, completed, cancelled
-    totalPrice: 1950000,
-    bookingDate: "2026-04-01",
-  },
-  {
-    id: "TRP-61230",
-    carName: "VinFast VF3",
-    image: "/images/vf3/vf3.jpg",
-    startDate: "2026-03-10",
-    endDate: "2026-03-12",
-    status: "completed",
-    totalPrice: 700000,
-    bookingDate: "2026-03-05",
-  },
-  {
-    id: "TRP-10924",
-    carName: "VinFast Limo Green",
-    image: "/images/mpv7/mpv7.jpg",
-    startDate: "2026-02-25",
-    endDate: "2026-02-26",
-    status: "cancelled",
-    totalPrice: 800000,
-    bookingDate: "2026-02-20",
-  }
-];
+import { mockBookings, mockCars } from "@/lib/data";
+
+// Helpers to get car info for bookings
+const getCarForBooking = (carId: string) => mockCars.find(c => c.id === carId);
+
 
 export default function TripsPage() {
   const [activeTab, setActiveTab] = useState("all");
@@ -62,7 +34,23 @@ export default function TripsPage() {
     return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
   };
 
-  const filteredTrips = activeTab === "all" ? mockTrips : mockTrips.filter(t => t.status === activeTab);
+  const trips = mockBookings.map(bk => {
+    const car = getCarForBooking(bk.car_id);
+    return {
+      id: bk.id,
+      carName: car?.name || "Xe không xác định",
+      image: car?.images[0] || "/images/placeholder.jpg",
+      startDate: bk.start_date,
+      endDate: bk.end_date,
+      status: bk.status === 'pending' || bk.status === 'confirmed' ? 'upcoming' : bk.status,
+      totalPrice: bk.total_price,
+      bookingDate: bk.start_date, // Using start_date as placeholder for booking date
+      pickup_location: bk.pickup_location,
+      dropoff_location: bk.dropoff_location
+    };
+  });
+
+  const filteredTrips = activeTab === "all" ? trips : trips.filter(t => t.status === activeTab);
 
   return (
     <div className="min-h-screen bg-gray-50/50 pt-24 pb-20">
@@ -129,7 +117,7 @@ export default function TripsPage() {
                     </div>
                     <div className="flex items-center gap-2">
                       <HiOutlineLocationMarker className="text-[#18A14D]" size={18} />
-                      <span>Phú Quốc</span>
+                      <span>{trip.pickup_location}</span>
                     </div>
                   </div>
                 </div>
@@ -150,6 +138,7 @@ export default function TripsPage() {
 
               </div>
             ))
+
           ) : (
             <div className="bg-white rounded-3xl p-12 text-center border border-gray-100 flex flex-col items-center justify-center">
                <div className="w-24 h-24 bg-gray-50 rounded-full flex items-center justify-center mb-4">

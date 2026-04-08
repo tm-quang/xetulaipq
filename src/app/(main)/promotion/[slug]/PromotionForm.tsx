@@ -11,7 +11,7 @@ export default function PromotionForm({ promotionTitle }: { promotionTitle: stri
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
 
-  const locations = ["Sân bay Phú Quốc", "Cảng Bãi Vòng", "Thị trấn Dương Đông", "Vinpearl"];
+  const locations = ["Sân bay Rạch Giá", "Cảng Bãi Vòng", "Thị trấn Dương Đông", "Vinpearl"];
 
   const handleApplyVoucher = () => {
     const code = voucher.trim().toUpperCase();

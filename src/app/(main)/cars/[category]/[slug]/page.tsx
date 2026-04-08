@@ -13,7 +13,7 @@ export async function generateMetadata({ params }: Props) {
 
   return {
     title: `Thuê xe ${car.name}`,
-    description: `Dịch vụ cho thuê xe ${car.name} tự lái tại Phú Quốc. Giá chỉ từ ${formatCurrencyVND(car.price_per_day)}/ngày. Thủ tục đơn giản, xe đời mới.`,
+    description: `Dịch vụ cho thuê xe ${car.name} tự lái tại Rạch Giá. Giá chỉ từ ${formatCurrencyVND(car.price_per_day)}/ngày. Thủ tục đơn giản, xe đời mới.`,
     alternates: {
       canonical: `/cars/${car.category}/${car.slug}`,
     },

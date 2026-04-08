@@ -46,7 +46,7 @@ function BookingContent() {
   const [voucherError, setVoucherError] = useState("");
 
   const locations = [
-    "Sân bay Phú Quốc",
+    "Sân bay Rạch Giá",
     "Cảng Bãi Vòng",
     "Cảng An Thới",
     "Vinpearl / Grand World",
@@ -312,11 +312,11 @@ function BookingContent() {
                  <div className="w-8 h-8 rounded-full bg-[#18A14D] text-white flex items-center justify-center">
                     <MdCheckCircle size={18} /> 
                  </div>
-                 Cam kết từ Xế Tự Lái
+                 Cam kết từ VF5 Tự Lái
               </h4>
               <ul className="space-y-4 font-bold text-sm text-gray-600 pl-2">
                 <li className="flex items-start gap-3"><span className="text-[#18A14D]">•</span> Xe luôn sạch sẽ, bảo dưỡng định kỳ trước khi giao.</li>
-                <li className="flex items-start gap-3"><span className="text-[#18A14D]">•</span> Hỗ trợ sự cố kỹ thuật 24/7 toàn đảo Phú Quốc.</li>
+                <li className="flex items-start gap-3"><span className="text-[#18A14D]">•</span> Hỗ trợ sự cố kỹ thuật 24/7 toàn đảo Rạch Giá.</li>
                 <li className="flex items-start gap-3"><span className="text-[#18A14D]">•</span> Đổi xe miễn phí nếu xe gặp lỗi do nhà sản xuất.</li>
               </ul>
             </div>
@@ -333,7 +333,7 @@ function BookingContent() {
               </div>
               <h2 className="text-3xl md:text-4xl font-black text-gray-900 mb-4 uppercase tracking-tight">Yêu cầu đã gửi!</h2>
               <p className="text-gray-500 font-bold leading-relaxed mb-10">
-                Cảm ơn <span className="text-gray-900 border-b-2 border-[#18A14D]/20">{formData.name || "bạn"}</span>! Chúng tôi đã tiếp nhận yêu cầu đặt xe cho chuyến đi tại Phú Quốc. Nhân viên sẽ liên hệ xác nhận sớm nhất qua số điện thoại <span className="text-gray-900">{formData.phone}</span>.
+                Cảm ơn <span className="text-gray-900 border-b-2 border-[#18A14D]/20">{formData.name || "bạn"}</span>! Chúng tôi đã tiếp nhận yêu cầu đặt xe cho chuyến đi tại Rạch Giá. Nhân viên sẽ liên hệ xác nhận sớm nhất qua số điện thoại <span className="text-gray-900">{formData.phone}</span>.
               </p>
               <div className="space-y-4">
                 <Link href="/" className="block w-full bg-[#18A14D] hover:bg-[#158c42] text-white font-black py-5 rounded-2xl transition-all shadow-lg shadow-[#18A14D]/20 uppercase tracking-widest text-sm">

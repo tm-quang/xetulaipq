@@ -94,7 +94,7 @@ export default function ContentManagement() {
                 <label className="block text-[10px] text-gray-500 font-bold uppercase tracking-widest mb-3 ml-2">Mô tả ngắn (Description)</label>
                 <textarea 
                   rows={4}
-                  defaultValue="Khám phá phú quốc qua từng vòng bánh xe cùng hệ thống xe điện thông minh 100% tại Xế Tự Lái." 
+                  defaultValue="Khám phá Rạch Giá qua từng vòng bánh xe cùng hệ thống xe điện thông minh 100% tại VF5 Tự Lái." 
                   className="w-full bg-white/5 border border-white/10 rounded-[32px] px-6 py-5 text-sm text-gray-300 focus:outline-none focus:border-[#18A14D]/70 focus:bg-white/10 transition leading-relaxed font-medium"
                 />
               </div>

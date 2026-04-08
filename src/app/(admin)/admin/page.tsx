@@ -24,7 +24,7 @@ export default function AdminLoginPage() {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    
+
     // Temporary bypass for requested admin credentials
     if (email === "admin@xetulaipq.vn" && password === "03053991") {
       localStorage.setItem("admin_bypass", "true");
@@ -63,14 +63,13 @@ export default function AdminLoginPage() {
           <div className="inline-flex items-center justify-center w-20 h-20 rounded-3xl bg-gradient-to-br from-[#18A14D] to-[#128a3f] shadow-2xl shadow-[#18A14D]/30 mb-6 group hover:rotate-12 transition-transform duration-500">
             <span className="text-white font-black text-3xl">X</span>
           </div>
-          <h1 className="text-3xl font-black text-gray-900 tracking-tighter uppercase">Xê Tu Lái</h1>
+          <h1 className="text-3xl font-black text-gray-900 tracking-tighter uppercase">VF5 Tự Lái</h1>
           <p className="text-xs font-black text-[#18A14D] uppercase tracking-[0.3em] mt-2">Hệ thống quản trị</p>
         </div>
 
-        <div className="bg-white border border-gray-100 rounded-[40px] p-10 shadow-2xl shadow-black/5 relative">
+        <div className="bg-white border border-gray-100 rounded-[40px] p-10 shadow-xl shadow-black/5 relative">
           <div className="mb-8">
-            <h2 className="text-xl font-black text-gray-900 uppercase tracking-tight">Đăng nhập Admin</h2>
-            <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mt-1">Truy cập vào bảng điều khiển nội bộ</p>
+            <h2 className="text-xl font-black text-gray-900 uppercase tracking-tight">Đăng nhập Quản trị</h2>
           </div>
 
           <form onSubmit={handleLogin} className="space-y-5">
@@ -82,13 +81,12 @@ export default function AdminLoginPage() {
                   type="email"
                   value={email}
                   onChange={e => setEmail(e.target.value)}
-                  placeholder="admin@xetulaipq.vn"
                   required
                   className="w-full bg-gray-50 border border-gray-100 text-gray-900 placeholder-gray-400 rounded-2xl pl-14 pr-6 py-4 text-sm font-bold focus:outline-none focus:border-[#18A14D]/50 focus:bg-white focus:shadow-md transition-all"
                 />
               </div>
             </div>
-            
+
             <div className="space-y-2">
               <label className="block text-[10px] font-black text-gray-400 uppercase tracking-widest leading-none ml-1">Mật khẩu bảo mật</label>
               <div className="relative group">
@@ -97,7 +95,6 @@ export default function AdminLoginPage() {
                   type={showPassword ? "text" : "password"}
                   value={password}
                   onChange={e => setPassword(e.target.value)}
-                  placeholder="••••••••"
                   required
                   className="w-full bg-gray-50 border border-gray-100 text-gray-900 placeholder-gray-400 rounded-2xl pl-14 pr-14 py-4 text-sm font-bold focus:outline-none focus:border-[#18A14D]/50 focus:bg-white focus:shadow-md transition-all"
                 />
@@ -110,7 +107,7 @@ export default function AdminLoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-gradient-to-r from-[#18A14D] to-[#15c45e] text-white font-black py-4.5 rounded-2xl shadow-xl shadow-[#18A14D]/25 hover:shadow-[#18A14D]/40 transition-all active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed text-xs uppercase tracking-[0.2em] mt-4"
+              className="w-full bg-gradient-to-r from-[#18A14D] to-[#15c45e] text-white font-black py-4 rounded-2xl shadow-xl shadow-[#18A14D]/25 hover:shadow-[#18A14D]/40 transition-all active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed text-xs uppercase tracking-[0.2em] mt-4"
             >
               {loading ? "Đang xác thực..." : "Xác nhận Đăng nhập"}
             </button>
@@ -132,7 +129,7 @@ export default function AdminLoginPage() {
         </div>
 
         <p className="text-center text-gray-400 text-[10px] font-bold mt-10 uppercase tracking-widest">
-          © 2026 Xê Tu Lái · Bảo mật nội bộ hệ thống
+          © 2026 Xe Tự Lái Rạch Giá
         </p>
       </div>
     </div>

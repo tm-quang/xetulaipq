@@ -39,7 +39,7 @@ export default function TripsPage() {
     return {
       id: bk.id,
       carName: car?.name || "Xe không xác định",
-      image: car?.images[0] || "/images/placeholder.jpg",
+      image: car?.images[0] || "/images/vf5/vf5.png",
       startDate: bk.start_date,
       endDate: bk.end_date,
       status: bk.status === 'pending' || bk.status === 'confirmed' ? 'upcoming' : bk.status,

@@ -1,10 +1,11 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useState, useEffect } from "react";
-import { HiMenu, HiX, HiInformationCircle, HiClock, HiUserAdd, HiLogin } from "react-icons/hi";
+import { HiMenu, HiX, HiInformationCircle, HiPhone } from "react-icons/hi";
 import { FaCar } from "react-icons/fa";
-import { LuHouse, LuGift, LuMap } from "react-icons/lu";
+import { LuHouse, LuGift } from "react-icons/lu";
 import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -32,7 +33,6 @@ export default function Header() {
     { name: "Tìm xe", href: "/cars", icon: FaCar },
     { name: "Khuyến mãi", href: "/promotion", icon: LuGift },
     { name: "Về chúng tôi", href: "/about", icon: HiInformationCircle },
-    { name: "Chuyến đi", href: "/trips", icon: LuMap },
   ];
 
   return (
@@ -55,9 +55,8 @@ export default function Header() {
           </button>
 
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 text-primary font-bold text-2xl tracking-tighter md:ml-0">
-            <span className="text-gray-900">XẾ</span>
-            <span className="bg-primary text-white px-2 py-0.5 rounded-lg text-md">TỰ LÁI</span>
+          <Link href="/" className="flex items-center md:ml-0">
+            <Image src="/images/Logo/logo.png" alt="Logo" width={160} height={40} className="h-10 w-auto object-contain" />
           </Link>
 
           {/* Desktop Nav */}
@@ -71,28 +70,13 @@ export default function Header() {
 
           {/* Auth Actions (Desktop) */}
           <div className="hidden md:flex items-center gap-5">
-            <Link
-              href="/trips"
-              className="text-sm font-semibold text-gray-700 hover:text-primary transition-colors flex items-center gap-1.5"
+            <a
+              href="tel:0933960788"
+              className="bg-primary text-white pl-4 pr-5 py-2 rounded-full font-bold text-sm hover:bg-primary/90 shadow-md shadow-primary/10 transition active:scale-95 flex items-center gap-2"
             >
-              <HiClock size={19} className="text-gray-400" />
-              Chuyến đi
-            </Link>
-            <div className="h-4 w-px bg-gray-200" />
-            <div className="flex items-center gap-3">
-              <Link
-                href="/register"
-                className="text-sm font-bold text-gray-800 hover:text-primary transition-colors"
-              >
-                Đăng ký
-              </Link>
-              <Link
-                href="/login"
-                className="bg-primary text-white px-5 py-2 rounded-full font-bold text-sm hover:bg-primary/90 shadow-md shadow-primary/10 transition active:scale-95"
-              >
-                Đăng nhập
-              </Link>
-            </div>
+              <HiPhone size={18} />
+              Hotline: 0933 960 788
+            </a>
           </div>
 
           {/* Placeholder to balance mobile header */}
@@ -122,9 +106,8 @@ export default function Header() {
               className="fixed top-0 left-0 bottom-0 w-[280px] bg-white z-[9999] shadow-2xl flex flex-col"
             >
               <div className="p-5 flex items-center justify-between border-b bg-white">
-                <Link href="/" onClick={() => setIsMobileMenuOpen(false)} className="flex items-center gap-2 text-primary font-bold text-2xl tracking-tighter">
-                  <span className="text-gray-900">XẾ</span>
-                  <span className="bg-primary text-white px-2 py-0.5 rounded-lg text-md">TỰ LÁI</span>
+                <Link href="/" onClick={() => setIsMobileMenuOpen(false)} className="flex items-center">
+                  <Image src="/images/Logo/logo.png" alt="Logo" width={160} height={40} className="h-10 w-auto object-contain" />
                 </Link>
                 <button
                   onClick={() => setIsMobileMenuOpen(false)}
@@ -151,22 +134,13 @@ export default function Header() {
               </div>
 
               <div className="p-4 border-t bg-gray-50/50 space-y-3 relative z-10">
-                <Link
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  href="/register"
-                  className="flex items-center justify-center gap-2 w-full py-3.5 rounded-xl font-bold border border-primary bg-white shadow-sm text-gray-700 active:scale-[0.98] transition"
-                >
-                  <HiUserAdd size={20} className="text-gray-400" />
-                  Đăng ký
-                </Link>
-                <Link
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  href="/login"
+                <a
+                  href="tel:0933960788"
                   className="flex items-center justify-center gap-2 w-full py-4 rounded-xl font-bold bg-primary text-white shadow-lg shadow-primary/20 active:scale-[0.98] transition"
                 >
-                  <HiLogin size={20} />
-                  Đăng nhập
-                </Link>
+                  <HiPhone size={20} />
+                  Hotline: 0933 960 788
+                </a>
               </div>
             </motion.div>
           </>

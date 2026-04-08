@@ -5,7 +5,7 @@ import { HiOutlineClock, HiTag, HiArrowRight, HiTicket } from "react-icons/hi";
 
 export const metadata = {
   title: "Chương Trình Khuyến Mãi",
-  description: "Cập nhật các chương trình ưu đãi, giảm giá thuê xe điện VinFast mới nhất tại Xế Tự Lái Phú Quốc.",
+  description: "Cập nhật các chương trình ưu đãi, giảm giá thuê xe điện VinFast mới nhất tại VF5 Tự Lái Rạch Giá.",
 };
 
 export default function PromotionsPage() {
@@ -15,7 +15,7 @@ export default function PromotionsPage() {
       <section className="relative py-10 md:py-16 bg-gray-900 overflow-hidden">
         <div className="absolute inset-0 opacity-40">
           <Image 
-            src="https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?q=80&w=1470&auto=format&fit=crop"
+            src="/images/vf5/vf5-1.png"
             alt="Promotion Background"
             fill
             className="object-cover"
@@ -31,7 +31,7 @@ export default function PromotionsPage() {
             Chương Trình <br/> <span className="text-[#18A14D]">Khuyến Mãi</span>
           </h1>
           <p className="text-gray-300 max-w-xl mx-auto text-sm md:text-base leading-relaxed opacity-90">
-            Đừng bỏ lỡ cơ hội nhận ưu đãi hấp dẫn khi trải nghiệm dịch vụ thuê xe điện xanh. Tiết kiệm hơn, đi xa hơn cùng Xế Tự Lái.
+            Đừng bỏ lỡ cơ hội nhận ưu đãi hấp dẫn khi trải nghiệm dịch vụ thuê xe điện xanh. Tiết kiệm hơn, đi xa hơn cùng VF5 Tự Lái.
           </p>
         </div>
       </section>
@@ -106,7 +106,7 @@ export default function PromotionsPage() {
             Nhận Thông Báo <br/> <span className="text-white/80">Ưu Đãi Sớm Nhất</span>
           </h2>
           <p className="text-[#E8F5E9] max-w-lg mx-auto font-medium text-sm md:text-base mb-8 opacity-90 relative z-10">
-            Đăng ký bản tin để nhận các mã giảm giá bí mật dành riêng cho cộng đồng Xế Tự Lái.
+            Đăng ký bản tin để nhận các mã giảm giá bí mật dành riêng cho cộng đồng VF5 Tự Lái.
           </p>
           
           <div className="max-w-md mx-auto flex flex-col md:flex-row gap-3 relative z-10">

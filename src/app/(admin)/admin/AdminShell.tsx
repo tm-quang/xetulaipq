@@ -1,13 +1,13 @@
 "use client";
 
-import { useState, useEffect, useCallback, useRef } from "react";
-import { useRouter, usePathname } from "next/navigation";
+import { useState, useEffect, useCallback, useRef, Suspense } from "react";
+import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   HiHome, HiCalendar, HiUsers, HiTruck, HiTag, HiPhotograph,
-  HiPencilAlt, HiLogout, HiMenuAlt2, HiX, HiChevronDown,
+  HiPencilAlt, HiLogout, HiMenuAlt2, HiChevronDown,
   HiBell, HiCog
 } from "react-icons/hi";
 
@@ -33,12 +33,25 @@ const navItems = [
       { label: "Trang tĩnh", href: "/admin/content/pages" },
     ]
   },
-  { label: "Cài đặt", href: "/admin/settings", icon: HiCog },
+  { 
+    label: "Cài đặt hệ thống", 
+    icon: HiCog,
+    children: [
+      { label: "Cài đặt chung", href: "/admin/settings?tab=general" },
+      { label: "Cấu hình Email", href: "/admin/settings?tab=email" },
+      { label: "Giao diện website", href: "/admin/settings?tab=appearance" },
+      { label: "Bảo mật & Auth", href: "/admin/settings?tab=security" },
+      { label: "Cơ sở dữ liệu", href: "/admin/settings?tab=database" },
+    ]
+  },
 ];
 
-export default function AdminShell({ children }: { children: React.ReactNode }) {
+function AdminShellContent({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const currentUrl = pathname + (searchParams.toString() ? `?${searchParams.toString()}` : "");
+  
   const sidebarRef = useRef<HTMLDivElement>(null);
   
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -99,53 +112,53 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
 
   if (loading) return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-      <div className="w-10 h-10 border-4 border-[#18A14D]/20 border-t-[#18A14D] rounded-full animate-spin" />
+      <div className="w-12 h-12 border-[5px] border-[#18A14D]/20 border-t-[#18A14D] rounded-full animate-spin shadow-lg" />
     </div>
   );
   if (!authenticated) return null;
 
   return (
-    <div className="flex h-screen bg-gray-50 text-gray-900 overflow-hidden font-medium">
-      {/* Sidebar */}
+    <div className="flex h-screen bg-[#F8FAFC] text-gray-900 overflow-hidden font-medium">
+      {/* Premium Sidebar */}
       <aside 
         ref={sidebarRef}
-        className={`${sidebarOpen ? 'w-72' : 'w-20'} flex-shrink-0 flex flex-col bg-white border-r border-gray-200 transition-all duration-300 relative z-30 shadow-sm`}
+        className={`${sidebarOpen ? 'w-[280px]' : 'w-24'} flex-shrink-0 flex flex-col bg-white border-r border-gray-100 transition-all duration-300 relative z-30 shadow-[4px_0_24px_rgba(0,0,0,0.02)]`}
       >
         {/* Brand */}
-        <div className="h-20 flex items-center px-6 border-b border-gray-100 gap-3 flex-shrink-0">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#18A14D] to-[#128a3f] flex items-center justify-center flex-shrink-0 shadow-lg shadow-[#18A14D]/20">
-            <span className="text-white font-black text-lg">X</span>
+        <div className="h-24 flex items-center px-7 border-b border-gray-50 gap-4 flex-shrink-0 bg-white">
+          <div className="w-12 h-12 rounded-[18px] bg-gradient-to-br from-[#18A14D] to-[#128a3f] flex items-center justify-center flex-shrink-0 shadow-xl shadow-[#18A14D]/25 border-2 border-white/20">
+            <span className="text-white font-black text-xl">X</span>
           </div>
           {sidebarOpen && (
             <div className="flex flex-col">
-              <span className="font-black text-base leading-none tracking-tight text-gray-900 uppercase">Xê Tu Lái</span>
-              <span className="text-[10px] font-bold text-[#18A14D] uppercase tracking-widest mt-1">Hệ thống quản trị</span>
+              <span className="font-black text-lg leading-none tracking-tight text-gray-900 uppercase">VF5 Tự Lái</span>
+              <span className="text-[10px] font-black text-[#18A14D] uppercase tracking-widest mt-1">Hệ thống quản trị</span>
             </div>
           )}
         </div>
 
-        {/* Nav */}
-        <nav className="flex-1 py-6 px-4 space-y-1 overflow-y-auto [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-thumb]:bg-gray-100">
+        {/* Nav Accordion */}
+        <nav className="flex-1 py-6 px-5 space-y-1.5 overflow-y-auto [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-thumb]:bg-gray-200 [&::-webkit-scrollbar-thumb]:rounded-full">
           {navItems.map(item => {
             const Icon = item.icon;
             const hasChildren = !!item.children;
             const isExpanded = expandedItem === item.label;
-            const isActive = item.href ? (pathname === item.href || pathname.startsWith(item.href + '/')) : item.children?.some(child => pathname === child.href);
+            const isActive = item.href ? (currentUrl === item.href || currentUrl.startsWith(item.href + '/')) : item.children?.some(child => currentUrl === child.href || currentUrl.startsWith(child.href + '&'));
 
             const content = (
-              <div className={`flex items-center justify-between gap-3.5 px-4 py-3 rounded-2xl text-[12px] font-black uppercase tracking-widest transition-all group cursor-pointer ${
+              <div className={`flex items-center justify-between gap-4 px-5 py-4 rounded-[20px] text-[13px] font-black uppercase tracking-widest transition-all group cursor-pointer ${
                 isActive && !hasChildren
-                  ? 'bg-[#18A14D] text-white shadow-lg shadow-[#18A14D]/25'
+                  ? 'bg-gradient-to-r from-[#18A14D] to-[#158c42] text-white shadow-xl shadow-[#18A14D]/25'
                   : isExpanded || isActive
-                    ? 'text-[#18A14D] bg-green-50/50'
-                    : 'text-gray-400 hover:text-gray-900 hover:bg-gray-50'
+                    ? 'text-[#18A14D] bg-[#18A14D]/10 border border-[#18A14D]/10'
+                    : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50 border border-transparent hover:border-gray-100'
               }`}>
-                <div className="flex items-center gap-3.5">
-                  <Icon size={18} className={isActive ? (hasChildren ? 'text-[#18A14D]' : 'text-white') : 'text-gray-300 group-hover:text-[#18A14D]'} />
+                <div className="flex items-center gap-4">
+                  <Icon size={22} className={isActive ? (hasChildren ? 'text-[#18A14D]' : 'text-white') : 'text-gray-400 group-hover:text-gray-700 transition-colors'} />
                   {sidebarOpen && <span>{item.label}</span>}
                 </div>
                 {hasChildren && sidebarOpen && (
-                  <HiChevronDown size={14} className={`transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`} />
+                  <HiChevronDown size={18} className={`transition-transform duration-300 ${isExpanded ? 'rotate-180 text-[#18A14D]' : 'text-gray-400'}`} />
                 )}
               </div>
             );
@@ -162,7 +175,7 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
                   </div>
                 )}
 
-                {/* Submenu */}
+                {/* Dropmenu Inside Sidebar */}
                 <AnimatePresence>
                   {hasChildren && isExpanded && sidebarOpen && (
                     <motion.div
@@ -170,15 +183,15 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
                       animate={{ height: 'auto', opacity: 1 }}
                       exit={{ height: 0, opacity: 0 }}
                       transition={{ duration: 0.3, ease: "easeInOut" }}
-                      className="overflow-hidden pl-11 pr-2 space-y-1"
+                      className="overflow-hidden pl-14 pr-2 space-y-1.5 pt-1"
                     >
                       {item.children?.map(child => (
                         <Link
                           key={child.href}
                           href={child.href}
-                          className={`block px-4 py-2.5 rounded-xl text-[11px] font-bold uppercase tracking-widest transition-all ${
-                            pathname === child.href
-                              ? 'text-[#18A14D] bg-[#18A14D]/5'
+                          className={`block px-5 py-3 rounded-[16px] text-[11px] font-black uppercase tracking-widest transition-all ${
+                            currentUrl === child.href || currentUrl.startsWith(child.href + '&')
+                              ? 'text-[#18A14D] bg-[#18A14D]/5 shadow-sm'
                               : 'text-gray-400 hover:text-gray-900 hover:bg-gray-50'
                           }`}
                         >
@@ -193,77 +206,93 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
           })}
         </nav>
 
-        {/* User */}
-        <div className="p-4 border-t border-gray-100 bg-gray-50/50">
+        {/* User Footer */}
+        <div className="p-5 border-t border-gray-50 bg-white">
           <button
             onClick={handleLogout}
-            className="w-full flex items-center gap-3.5 px-4 py-4 rounded-2xl text-[12px] font-black uppercase tracking-widest text-gray-400 hover:text-red-600 hover:bg-red-50 transition-all"
+            className="w-full flex items-center gap-4 px-5 py-4 rounded-[20px] text-[12px] font-black uppercase tracking-[0.15em] text-gray-400 hover:text-red-500 hover:bg-red-50 hover:shadow-sm border border-transparent hover:border-red-100 transition-all border-dashed"
           >
-            <HiLogout size={18} className="flex-shrink-0" />
+            <HiLogout size={20} className="flex-shrink-0" />
             {sidebarOpen && <span>Đăng xuất</span>}
           </button>
         </div>
       </aside>
 
-      {/* Main Content */}
+      {/* Main Content Area */}
       <div className="flex-1 flex flex-col overflow-hidden relative z-10 shadow-[-20px_0_40px_rgba(0,0,0,0.02)]">
-        {/* Topbar */}
-        <header className="h-16 flex items-center justify-between px-6 bg-white border-b border-gray-100 sticky top-0 z-20">
-          <div className="flex items-center gap-4">
+        {/* Sleek Topbar */}
+        <header className="h-24 flex items-center justify-between px-8 bg-white/80 backdrop-blur-xl border-b border-gray-100/50 sticky top-0 z-20 transition-all">
+          <div className="flex items-center gap-5">
             <button
               onClick={() => setSidebarOpen(!sidebarOpen)}
-              className="w-10 h-10 flex items-center justify-center rounded-xl text-gray-400 hover:bg-gray-50 hover:text-gray-900 transition-all"
+              className="w-12 h-12 flex items-center justify-center rounded-2xl text-gray-500 bg-gray-50 hover:bg-white hover:text-[#18A14D] hover:shadow-lg hover:shadow-black/5 transition-all border border-gray-100 hover:border-gray-200"
             >
-              {sidebarOpen ? <HiX size={20} /> : <HiMenuAlt2 size={20} />}
+              {sidebarOpen ? <HiMenuAlt2 size={22} className="scale-x-[-1]" /> : <HiMenuAlt2 size={22} />}
             </button>
-            <div className="h-5 w-px bg-gray-200" />
-            <h2 className="text-xs font-black text-gray-900 uppercase tracking-widest">
-              {navItems.find(n => n.href === pathname || n.children?.some(c => c.href === pathname))?.label || "Workspace"}
+            <div className="h-6 w-px bg-gray-200" />
+            <h2 className="text-[14px] font-black text-gray-900 uppercase tracking-widest leading-none">
+              {navItems.find(n => n.href === pathname || n.children?.some(c => currentUrl.includes(c.href.split('?')[0])))?.label || "Workspace"}
             </h2>
           </div>
 
-          <div className="flex items-center gap-4">
-            <button className="relative w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center text-gray-400 hover:bg-white hover:text-[#18A14D] hover:shadow-sm transition-all border border-transparent">
-              <HiBell size={18} />
-              <span className="absolute top-2.5 right-2.5 w-2 h-2 rounded-full bg-red-500 border-2 border-white" />
+          <div className="flex items-center gap-5">
+            <button className="relative w-12 h-12 rounded-2xl bg-gray-50 flex items-center justify-center text-gray-500 hover:bg-white hover:text-[#18A14D] hover:shadow-md transition-all border border-gray-100">
+              <HiBell size={22} className="hover:animate-swing" />
+              <span className="absolute top-3 right-3 w-2.5 h-2.5 rounded-full bg-red-500 border-2 border-white shadow-sm" />
             </button>
-            <div className="h-6 w-px bg-gray-200 mx-1" />
+            <div className="h-8 w-px bg-gray-200 mx-1" />
             <div className="relative">
               <button
                 onClick={() => setProfileOpen(!profileOpen)}
-                className="flex items-center gap-2.5 px-1.5 py-1.5 rounded-[18px] hover:bg-gray-50 transition-all group"
+                className="flex items-center gap-3 px-2 py-2 rounded-2xl hover:bg-gray-50 transition-all group border border-transparent hover:border-gray-100"
               >
-                <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-[#18A14D] to-[#0e7a38] flex items-center justify-center shadow-lg shadow-[#18A14D]/20">
-                  <span className="text-white font-black text-sm uppercase">{userEmail[0]?.toUpperCase()}</span>
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#18A14D] to-[#0e7a38] flex items-center justify-center shadow-lg shadow-[#18A14D]/20">
+                  <span className="text-white font-black text-base uppercase">{userEmail[0]?.toUpperCase()}</span>
                 </div>
-                <div className="hidden sm:flex flex-col items-start leading-none">
-                  <span className="text-[10px] font-black text-gray-900 uppercase tracking-tighter">{userEmail.split('@')[0]}</span>
-                  <span className="text-[8px] font-bold text-[#18A14D] uppercase tracking-widest mt-1">Admin</span>
+                <div className="hidden sm:flex flex-col items-start leading-[1.1]">
+                  <span className="text-xs font-black text-gray-900 uppercase tracking-tight">{userEmail.split('@')[0]}</span>
+                  <span className="text-[10px] font-black text-[#18A14D] uppercase tracking-widest mt-1">Admin</span>
                 </div>
-                <HiChevronDown size={14} className="text-gray-300 group-hover:text-gray-600 transition-colors ml-1" />
+                <HiChevronDown size={16} className="text-gray-400 group-hover:text-gray-900 transition-colors ml-1" />
               </button>
-              {profileOpen && (
-                <div className="absolute right-0 top-14 w-52 bg-white border border-gray-100 rounded-[24px] p-2 shadow-2xl z-50 ring-1 ring-black/5 overflow-hidden">
-                  <div className="px-4 py-3 border-b border-gray-50 mb-1">
-                    <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest leading-none mb-1">Tài khoản</p>
-                    <p className="text-xs font-bold text-gray-900 truncate">{userEmail}</p>
-                  </div>
-                  <button onClick={handleLogout} className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-[11px] font-black uppercase tracking-widest text-red-600 hover:bg-red-50 transition-all outline-none">
-                    <HiLogout size={16} /> Đăng xuất
-                  </button>
-                </div>
-              )}
+              <AnimatePresence>
+                {profileOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                    transition={{ duration: 0.15 }}
+                    className="absolute right-0 top-16 w-60 bg-white border border-gray-100 rounded-[28px] p-2 shadow-2xl z-50 ring-1 ring-black/5 overflow-hidden"
+                  >
+                    <div className="px-5 py-4 border-b border-gray-50 mb-1">
+                      <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest leading-none mb-1.5">Tài khoản</p>
+                      <p className="text-sm font-bold text-gray-900 truncate">{userEmail}</p>
+                    </div>
+                    <button onClick={handleLogout} className="w-full flex items-center gap-3 px-5 py-4 rounded-xl text-xs font-black uppercase tracking-widest text-red-500 hover:text-red-700 hover:bg-red-50 transition-all outline-none">
+                      <HiLogout size={18} /> Đăng xuất
+                    </button>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
           </div>
         </header>
 
-        {/* Page content */}
-        <main className="flex-1 overflow-y-auto p-3 md:p-5 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-gray-200 [&::-webkit-scrollbar-thumb]:rounded-full">
-          <div className="max-w-[1600px] mx-auto">
+        {/* Page Content: Fixed opacity-0 invisible issue */}
+        <main className="flex-1 overflow-y-auto p-4 md:p-8 [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-gray-300 [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-gray-400 transition-colors">
+          <div className="max-w-[1600px] mx-auto min-h-full">
             {children}
           </div>
         </main>
       </div>
     </div>
+  );
+}
+
+export default function AdminShell({ children }: { children: React.ReactNode }) {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-gray-50 flex items-center justify-center"><div className="w-12 h-12 border-[5px] border-[#18A14D]/20 border-t-[#18A14D] rounded-full animate-spin shadow-lg" /></div>}>
+      <AdminShellContent>{children}</AdminShellContent>
+    </Suspense>
   );
 }

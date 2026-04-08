@@ -2,35 +2,35 @@
 
 import HeroBookingForm from "@/components/HeroBookingForm";
 import dynamic from "next/dynamic";
-import { mockCars } from "@/lib/data";
-
-const CarCard = dynamic(() => import("@/components/CarCard"));
-const PromotionsSection = dynamic(() => import("@/components/PromotionsSection"));
 import Link from "next/link";
+
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { HiSparkles, HiArrowRight } from "react-icons/hi";
+import { HiSparkles, HiCheckCircle, HiLightningBolt } from "react-icons/hi";
 
-const slides = [
+const PromotionsSection = dynamic(() => import("@/components/PromotionsSection"));
+
+type Slide = {
+  image: string;
+  title: string;
+  highlight: string;
+  desc?: string;
+};
+
+const slides: Slide[] = [
   {
-    image: "/images/hero-slide/hero-slide (1).jpg",
+    image: "/images/vf5/vf5-1.png",
     title: "TRẢI NGHIỆM LÁI",
     highlight: "XANH & ĐẲNG CẤP",
-    desc: "Khám phá phú quốc qua từng vòng bánh xe cùng hệ thống xe điện thông minh 100% tại Xế Tự Lái."
+    // desc: "Khám phá Rạch Giá qua từng vòng bánh xe cùng hệ thống xe điện thông minh 100% tại VF5 Tự Lái."
   },
   {
-    image: "/images/hero-slide/hero-slide (1).png",
+    image: "/images/vf5/vf5.png",
     title: "DỊCH VỤ THUÊ XE",
     highlight: "THÔNG MINH & TIẾT KIỆM",
-    desc: "Đa dạng các loại xe VinFast đời mới, thủ tục nhanh gọn, giao xe tận nơi cho mọi hành trình."
+    // desc: "Đa dạng các loại xe VinFast đời mới, thủ tục nhanh gọn, giao xe tận nơi cho mọi hành trình."
   },
-  {
-    image: "/images/hero-slide/hero-slide (2).jpg",
-    title: "KHÁM PHÁ ĐẢO NGỌC",
-    highlight: "THEO CÁCH CỦA BẠN",
-    desc: "Chuyến du lịch Phú Quốc sẽ hoàn hảo hơn khi bạn sở hữu sự tự do và riêng tư tuyệt đối."
-  }
 ];
 
 export default function Home() {
@@ -117,25 +117,121 @@ export default function Home() {
       {/* Featured Cars */}
       <section className="py-12 md:py-16 bg-white relative z-10 w-full">
         <div className="container mx-auto px-4 max-w-6xl">
-          <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between mb-4 gap-4">
             <div>
               <div className="flex items-center gap-2 mb-2">
                 <div className="bg-primary text-white w-10 h-10 rounded-xl flex items-center justify-center shadow-md">
                   <HiSparkles size={20} />
                 </div>
-                <h2 className="text-2xl md:text-3xl font-black uppercase tracking-tighter text-gray-900 drop-shadow-sm">Xe Nổi Bật</h2>
+                <h2 className="text-2xl md:text-3xl font-black uppercase tracking-tighter text-gray-900 drop-shadow-sm">Thông số chi tiết</h2>
               </div>
-              <p className="text-gray-500 font-medium text-sm md:text-base pl-1">Bảng giá cực kỳ ưu đãi cho các dòng xe <span className="text-[#18A14D]">được yêu thích nhất.</span></p>
+              <p className="text-gray-500 font-medium text-sm md:text-base pl-1">Khám phá sức mạnh và công nghệ của <span className="text-primary font-bold">VinFast VF5 Plus</span></p>
             </div>
-            <Link href="/cars" className="text-gray-600 bg-white border border-gray-200 shadow-sm font-bold text-sm flex items-center gap-2 hover:border-[#18A14D] hover:text-[#18A14D] px-5 py-2.5 rounded-xl transition-all group active:scale-95">
-              XEM TẤT CẢ <HiArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
-            </Link>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {mockCars.map((car) => (
-              <CarCard key={car.id} car={car} />
-            ))}
+          <div className="bg-white rounded-[32px] border border-gray-100 shadow-[0_20px_50px_rgba(0,0,0,0.05)] overflow-hidden mt-6 relative">
+            <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl -z-10 translate-x-1/2 -translate-y-1/2" />
+
+            <div className="flex flex-col lg:flex-row">
+              <div className="lg:w-2/5 p-8 md:p-12 border-b lg:border-b-0 lg:border-r border-gray-100 flex flex-col justify-center relative">
+                <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-3 py-1.5 rounded-xl text-sm font-bold w-fit mb-6">
+                  <HiLightningBolt size={18} /> 100% Thuần Điện
+                </div>
+                <h3 className="text-4xl md:text-5xl font-black text-gray-900 mb-4 tracking-tighter">VinFast VF5 Plus</h3>
+                <p className="text-gray-500 font-medium mb-8 leading-relaxed">
+                  Mẫu SUV điện cỡ nhỏ hoàn hảo cho nhu cầu di chuyển nội tỉnh. Thiết kế thời thượng, vận hành siêu êm ái cùng loạt trang bị an toàn vượt trội.
+                </p>
+
+                <div className="relative h-48 md:h-64 w-full mb-8">
+                  <Image
+                    src="/images/vf5/vf5.png"
+                    alt="VinFast VF5 Plus"
+                    fill
+                    className="object-cover rounded-3xl shadow-2xl drop-shadow-2xl hover:scale-105 transition-transform duration-500"
+                  />
+                </div>
+
+                <div className="flex items-center justify-between mt-auto">
+                  <div>
+                    <p className="text-sm font-bold text-gray-400 uppercase tracking-widest mb-1">Giá thuê từ</p>
+                    <p className="text-3xl font-black text-primary">700.000₫<span className="text-sm font-bold text-gray-500 ml-1">/ ngày</span></p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="lg:w-3/5 p-8 md:p-12">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-10">
+                  <div>
+                    <h4 className="text-lg font-black text-gray-900 mb-5 relative inline-block">
+                      Tổng quan
+                      <div className="absolute -bottom-2 left-0 w-1/2 h-1 bg-primary rounded-full" />
+                    </h4>
+                    <ul className="space-y-3">
+                      <li className="flex justify-between items-center border-b border-dashed border-gray-100 pb-2"><span className="text-gray-500 font-medium">Phân khúc</span><span className="font-bold text-gray-900">A-SUV điện</span></li>
+                      <li className="flex justify-between items-center border-b border-dashed border-gray-100 pb-2"><span className="text-gray-500 font-medium">Số chỗ</span><span className="font-bold text-gray-900">5 chỗ</span></li>
+                      <li className="flex justify-between items-center border-b border-dashed border-gray-100 pb-2"><span className="text-gray-500 font-medium">Hệ dẫn động</span><span className="font-bold text-gray-900 flex-1 text-right ml-2 line-clamp-1">Cầu trước (FWD)</span></li>
+                      <li className="flex justify-between items-center border-b border-dashed border-gray-100 pb-2"><span className="text-gray-500 font-medium">Công suất</span><span className="font-bold text-gray-900 flex-1 text-right ml-2 line-clamp-1">~100 kW (~134 HP)</span></li>
+                      <li className="flex justify-between items-center border-b border-dashed border-gray-100 pb-2"><span className="text-gray-500 font-medium">Mô-men xoắn</span><span className="font-bold text-gray-900">~135 Nm</span></li>
+                      <li className="flex justify-between items-center pb-2"><span className="text-gray-500 font-medium">Chế độ lái</span><span className="font-bold text-gray-900">Eco / Sport</span></li>
+                    </ul>
+                  </div>
+
+                  <div>
+                    <h4 className="text-lg font-black text-gray-900 mb-5 relative inline-block">
+                      Pin & Sạc
+                      <div className="absolute -bottom-2 left-0 w-1/2 h-1 bg-primary rounded-full" />
+                    </h4>
+                    <ul className="space-y-3">
+                      <li className="flex justify-between items-center border-b border-dashed border-gray-100 pb-2"><span className="text-gray-500 font-medium">Lưu trữ</span><span className="font-bold text-gray-900">37.23 kWh</span></li>
+                      <li className="flex justify-between items-center border-b border-dashed border-gray-100 pb-2"><span className="text-gray-500 font-medium">Loại pin</span><span className="font-bold text-gray-900">Lithium (LFP)</span></li>
+                      <li className="flex justify-between items-center border-b border-dashed border-gray-100 pb-2"><span className="text-gray-500 font-medium">Quãng đường</span><span className="font-bold text-gray-900 flex-1 text-right ml-2 line-clamp-1">300-326 km/lần</span></li>
+                      <li className="flex flex-col border-b border-dashed border-gray-100 pb-2">
+                        <span className="text-gray-500 font-medium mb-1 flex justify-between">Sạc nhanh <span>~30 phút</span></span>
+                        <div className="w-full bg-gray-100 rounded-full h-2 mt-1"><div className="bg-primary h-2 rounded-full w-[60%]"></div></div>
+                        <span className="font-bold text-gray-400 text-xs text-center mt-1">10% - 70%</span>
+                      </li>
+                    </ul>
+                  </div>
+
+                  <div className="md:col-span-2">
+                    <h4 className="text-lg font-black text-gray-900 mb-5 relative inline-block">
+                      Không gian & Tiện Ích
+                      <div className="absolute -bottom-2 left-0 w-1/2 h-1 bg-primary rounded-full" />
+                    </h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="bg-gray-50 p-4 rounded-2xl flex items-start gap-4 hover:bg-gray-100/80 transition-colors">
+                        <HiCheckCircle size={24} className="text-primary shrink-0 mt-0.5" />
+                        <div>
+                          <p className="font-bold text-gray-900 mb-1">Khoang hành lý 260L</p>
+                          <p className="text-sm font-medium text-gray-500">Lên đến ~900L tối đa khi gập phẳng hàng ghế sau.</p>
+                        </div>
+                      </div>
+                      <div className="bg-gray-50 p-4 rounded-2xl flex items-start gap-4 hover:bg-gray-100/80 transition-colors">
+                        <HiCheckCircle size={24} className="text-primary shrink-0 mt-0.5" />
+                        <div>
+                          <p className="font-bold text-gray-900 mb-1">Giải trí thông minh</p>
+                          <p className="text-sm font-medium text-gray-500">Màn hình trung tâm 8&quot; cảm ứng. Hỗ trợ trợ lý ảo. Apple Carplay & Android Auto.</p>
+                        </div>
+                      </div>
+                      <div className="bg-gray-50 p-4 rounded-2xl flex items-start gap-4 hover:bg-gray-100/80 transition-colors">
+                        <HiCheckCircle size={24} className="text-primary shrink-0 mt-0.5" />
+                        <div>
+                          <p className="font-bold text-gray-900 mb-1">Bảo vệ với 6 túi khí</p>
+                          <p className="text-sm font-medium text-gray-500">An toàn cho bạn và gia đình.</p>
+                        </div>
+                      </div>
+                      <div className="bg-gray-50 p-4 rounded-2xl flex items-start gap-4 hover:bg-gray-100/80 transition-colors">
+                        <HiCheckCircle size={24} className="text-primary shrink-0 mt-0.5" />
+                        <div>
+                          <p className="font-bold text-gray-900 mb-1">Cảnh báo an toàn</p>
+                          <p className="text-sm font-medium text-gray-500">Cảnh báo điểm mù, phương tiện cắt ngang và hỗ trợ đỗ xe.</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -145,7 +241,7 @@ export default function Home() {
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
             <div>
-              <h2 className="text-3xl font-black mb-6 uppercase tracking-tight">Tại sao chọn <span className="text-primary">Xê Tu Lái?</span></h2>
+              <h2 className="text-3xl font-black mb-6 uppercase tracking-tight">Tại sao chọn <span className="text-primary">VF5 Tự Lái?</span></h2>
               <div className="space-y-6">
                 <div className="flex gap-4">
                   <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary font-black text-xl">1</div>
@@ -172,7 +268,7 @@ export default function Home() {
             </div>
             <div className="relative h-[400px] rounded-3xl overflow-hidden shadow-xl">
               <Image
-                src="https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?q=80&w=1470&auto=format&fit=crop"
+                src="/images/vf5/vf5-1.png"
                 alt="Tại sao chọn"
                 fill
                 className="object-cover"

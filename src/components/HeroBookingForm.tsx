@@ -148,7 +148,7 @@ export default function HeroBookingForm() {
               className="w-full h-[56px] md:h-[70px] bg-[#18A14D] hover:bg-[#158c42] text-white font-extrabold px-4 rounded-xl md:rounded-2xl shadow-[0_10px_20px_rgba(24,161,77,0.2)] transition-all active:scale-[0.98] flex items-center justify-center gap-2 whitespace-nowrap uppercase tracking-widest text-md md:text-md"
             >
               <HiPaperAirplane className="rotate-45" size={18} />
-              Tìm xe
+              Gửi yêu cầu
             </button>
           </div>
         </div>

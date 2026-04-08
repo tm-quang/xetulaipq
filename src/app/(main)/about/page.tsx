@@ -3,7 +3,7 @@ import { HiCheckCircle, HiLightBulb, HiShieldCheck, HiStar, HiHeart } from "reac
 
 export const metadata = {
    title: "Về Chúng Tôi",
-   description: "Tìm hiểu về sứ mệnh, tầm nhìn và các giá trị cốt lõi của Xế Tự Lái Phú Quốc - Đơn vị tiên phong cung cấp dịch vụ thuê xe điện xanh 100%.",
+   description: "Tìm hiểu về sứ mệnh, tầm nhìn và các giá trị cốt lõi của VF5 Tự Lái Rạch Giá - Đơn vị tiên phong cung cấp dịch vụ thuê xe điện VinFast VF5 tự lái chất lượng.",
 };
 
 export default function AboutUsPage() {
@@ -13,7 +13,7 @@ export default function AboutUsPage() {
          <section className="relative py-20 md:py-40 bg-gray-900 overflow-hidden">
             <div className="absolute inset-0 opacity-50">
                <Image
-                  src="https://images.unsplash.com/photo-1579548122080-c35fd6820ecb?q=80&w=1470&auto=format&fit=crop"
+                  src="/images/vf5/vf5-1.png"
                   alt="About Us Background"
                   fill
                   className="object-cover"
@@ -27,10 +27,10 @@ export default function AboutUsPage() {
                      <HiHeart /> Hành trình xanh
                   </div>
                   <h1 className="text-2xl md:text-7xl font-black text-white mb-6 leading-[0.95] uppercase tracking-tight">
-                     Tiên phong <br /> <span className="text-[#18A14D]">Giao thông xanh</span> <br /> Tại Phú Quốc
+                     Tiên phong <br /> <span className="text-[#18A14D]">Giao thông xanh</span> <br /> Tại Rạch Giá
                   </h1>
                   <p className="text-gray-300 font-bold text-xl leading-relaxed opacity-90 drop-shadow-lg">
-                     Xế Tự Lái không chỉ là một đơn vị cho thuê xe. Chúng tôi là giải pháp du lịch thông minh, thân thiện và trách nhiệm với Đảo Ngọc.
+                     VF5 Tự Lái không chỉ là một dịch vụ cho thuê xe. Chúng tôi là giải pháp di chuyển thông minh, thân thiện và trách nhiệm tại Rạch Giá.
                   </p>
                </div>
             </div>
@@ -43,21 +43,11 @@ export default function AboutUsPage() {
                   <div className="relative">
                      <div className="relative h-[500px] w-full rounded-[48px] overflow-hidden shadow-2xl z-20">
                         <Image
-                           src="https://images.unsplash.com/photo-1707217596041-3820fa0cc0c2?q=80&w=1470&auto=format&fit=crop"
+                           src="/images/Logo/Logo.png"
                            alt="Mission"
                            fill
                            className="object-cover"
                         />
-                     </div>
-                     <div className="absolute -top-10 -left-10 w-40 h-40 bg-[#18A14D]/10 rounded-full blur-3xl -z-10"></div>
-                     <div className="absolute -bottom-10 -right-10 w-60 h-60 bg-blue-500/10 rounded-full blur-3xl -z-10"></div>
-
-                     <div className="absolute bottom-8 right-8 bg-white p-8 rounded-[32px] shadow-2xl z-30 flex items-center gap-6 border border-gray-100">
-                        <div className="w-16 h-16 rounded-2xl bg-[#18A14D] flex items-center justify-center text-white text-3xl font-black">100%</div>
-                        <div>
-                           <p className="font-black text-gray-900 text-lg uppercase tracking-tight">Xe điện VinFast</p>
-                           <p className="text-gray-500 font-bold text-xs uppercase tracking-widest">Đời mới nhất</p>
-                        </div>
                      </div>
                   </div>
 
@@ -73,7 +63,7 @@ export default function AboutUsPage() {
                            <div>
                               <h3 className="text-xl font-black text-gray-900 mb-2 uppercase tracking-tight">Bảo vệ môi trường</h3>
                               <p className="text-gray-500 font-medium leading-relaxed">
-                                 Mỗi chuyến hành trình bằng xe điện giúp giảm thiểu khí thải CO2, giữ cho bầu không khí Phú Quốc luôn trong lành và cân bằng.
+                                 Mỗi chuyến hành trình bằng xe điện giúp giảm thiểu khí thải CO2, giữ cho bầu không khí Rạch Giá luôn trong lành và cân bằng.
                               </p>
                            </div>
                         </div>
@@ -149,7 +139,7 @@ export default function AboutUsPage() {
                   Tham gia hành trình <br /> <span className="text-[#18A14D]">Tương lai cùng chúng tôi</span>
                </h2>
                <p className="text-gray-500 font-bold mb-12 text-lg max-w-2xl mx-auto leading-relaxed">
-                  Khám phá Phú Quốc trọn vẹn và văn minh nhất bằng việc lựa chọn xe điện xanh làm người bạn đồng hành.
+                  Khám phá Rạch Giá trọn vẹn và văn minh nhất bằng việc lựa chọn xe điện xanh làm người bạn đồng hành.
                </p>
 
                <div className="flex flex-wrap justify-center gap-6">

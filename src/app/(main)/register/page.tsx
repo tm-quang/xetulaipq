@@ -30,7 +30,7 @@ export default function RegisterPage() {
         {/* Right Side: Image */}
         <div className="w-full md:w-1/2 relative min-h-[300px] md:min-h-auto hidden md:block">
           <Image 
-             src="https://images.unsplash.com/photo-1660634629768-4ad01ba0379c?q=80&w=1470&auto=format&fit=crop"
+            src="/images/vf5/vf5.png"
             alt="Register Banner"
             fill
             className="object-cover"

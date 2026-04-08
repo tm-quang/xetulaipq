@@ -17,7 +17,7 @@ export default function PromotionsSection() {
               </div>
               <h2 className="text-2xl md:text-3xl font-black uppercase tracking-tighter text-gray-900 drop-shadow-sm">Siêu Khuyến Mãi</h2>
             </div>
-            <p className="text-gray-500 font-medium text-sm md:text-base pl-1">Chớp ngay deal hời, vi vu muôn nơi cùng <span className="text-[#18A14D]">Xế Tự Lái.</span></p>
+            <p className="text-gray-500 font-medium text-sm md:text-base pl-1">Chớp ngay deal hời, vi vu muôn nơi cùng <span className="text-[#18A14D]">VF5 Tự Lái.</span></p>
           </div>
           <Link href="/promotion" className="text-gray-600 bg-white border border-gray-200 shadow-sm font-bold text-sm flex items-center gap-2 hover:border-[#18A14D] hover:text-[#18A14D] px-5 py-2.5 rounded-xl transition-all group active:scale-95">
             XEM TẤT CẢ <HiArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />

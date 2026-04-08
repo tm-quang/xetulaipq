@@ -6,13 +6,14 @@ import "../globals.css";
 const roboto = Roboto({
   weight: ['300', '400', '500', '700', '900'],
   subsets: ["vietnamese", "latin"],
+  variable: '--font-roboto',
   display: 'swap',
 });
 
 export const metadata: Metadata = {
   title: {
-    template: "%s | Admin - Xê Tu Lái",
-    default: "Admin Dashboard - Xê Tu Lái",
+    template: "%s | Admin - VF5 Tự Lái",
+    default: "Admin Dashboard - VF5 Tự Lái",
   },
   robots: { index: false, follow: false },
 };
@@ -20,7 +21,7 @@ export const metadata: Metadata = {
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="vi">
-      <body className={`${roboto.className} bg-gray-50 text-gray-900`}>
+      <body className={`${roboto.variable} font-sans bg-gray-50 text-gray-900`}>
         <Toaster position="top-right" />
         {children}
       </body>

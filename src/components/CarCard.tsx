@@ -50,7 +50,7 @@ export default function CarCard({ car }: { car: Car }) {
         </Link>
 
         <p className="text-gray-500 text-[13px] font-medium line-clamp-2 mb-4 leading-relaxed flex-1">
-          {car.description || "Dòng xe hiện đại, đầy đủ tiện nghi, phù hợp cho mọi nẻo đường tại Phú Quốc."}
+          {car.description || "Dòng xe hiện đại, đầy đủ tiện nghi, phù hợp cho mọi nẻo đường tại Rạch Giá."}
         </p>
 
         <div className="flex gap-2.5 mb-5 text-gray-400 font-bold text-[10px] uppercase tracking-widest bg-gray-50/80 px-3 py-2 rounded-xl border border-gray-100 items-center justify-between">

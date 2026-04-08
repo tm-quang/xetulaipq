@@ -32,14 +32,14 @@ export default function LoginPage() {
         {/* Left Side: Image */}
         <div className="w-full md:w-1/2 relative min-h-[300px] md:min-h-auto hidden md:block">
           <Image
-            src="https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?q=80&w=1470&auto=format&fit=crop"
+            src="/images/vf5/vf5.png"
             alt="Login Banner"
             fill
             className="object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/40 to-transparent flex flex-col justify-end p-12">
             <h2 className="text-4xl font-black text-white mb-4 leading-tight uppercase tracking-tight">Chào mừng <br /><span className="text-[#18A14D]">Trở lại!</span></h2>
-            <p className="text-gray-300 font-medium">Bắt đầu hành trình di chuyển xanh và thông minh cùng Xế Tự Lái Phú Quốc.</p>
+            <p className="text-gray-300 font-medium">Bắt đầu hành trình di chuyển xanh và thông minh cùng VF5 Tự Lái Rạch Giá.</p>
           </div>
         </div>
 

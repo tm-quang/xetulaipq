@@ -14,20 +14,20 @@ export default function Footer() {
           {/* Brand & Contact Info */}
           <div className="lg:col-span-4 pr-0 lg:pr-6">
             <Link href="/" className="flex items-center gap-2 text-[#18A14D] font-black text-3xl tracking-tighter mb-6 inline-block">
-              <span>XẾ</span>
-              <span className="bg-[#18A14D] text-white px-3 py-1.5 rounded-xl text-2xl shadow-sm">TU LÁI</span>
+              <span>VF5</span>
+              <span className="bg-[#18A14D] text-white px-3 py-1.5 rounded-xl text-2xl shadow-sm">TỰ LÁI</span>
             </Link>
             <p className="mb-8 text-gray-500 font-medium leading-relaxed">
-              Trải nghiệm dịch vụ cho thuê xe điện VinFast tự lái số 1 tại Phú Quốc. Xe đời mới 100%, thủ tục nhanh gọn, giao xe tận nơi. Hành trình xanh, trọn niềm vui!
+              Trải nghiệm dịch vụ cho thuê xe điện VinFast VF5 tự lái số 1 tại Rạch Giá. Xe đời mới 100%, thủ tục nhanh gọn, giao xe tận nơi. Hành trình xanh, trọn niềm vui!
             </p>
             <div className="space-y-4">
-              <a href="tel:09xx" className="flex items-start gap-4 p-4 rounded-2xl hover:bg-gray-50 border border-transparent hover:border-gray-100 transition-all group">
+              <a href="tel:0933960788" className="flex items-start gap-4 p-4 rounded-2xl hover:bg-gray-50 border border-transparent hover:border-gray-100 transition-all group">
                 <div className="w-10 h-10 rounded-full bg-[#18A14D]/10 text-[#18A14D] flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
                   <HiPhone size={18} />
                 </div>
                 <div>
                   <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Hotline Đặt Xe</p>
-                  <p className="font-black text-gray-900 text-lg group-hover:text-[#18A14D] transition-colors">0123 456 789</p>
+                  <p className="font-black text-gray-900 text-lg group-hover:text-[#18A14D] transition-colors">0933 960 788</p>
                 </div>
               </a>
 
@@ -36,8 +36,8 @@ export default function Footer() {
                   <HiLocationMarker size={18} />
                 </div>
                 <div>
-                  <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Trụ sở</p>
-                  <p className="font-bold text-gray-800 leading-snug">Số 123 Đường Điện Biên Phủ, Phường Dương Đông, Phú Quốc, Kiên Giang</p>
+                  <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Địa chỉ</p>
+                  <p className="font-bold text-gray-800 leading-snug">Lê Minh Xuân, Xã Bình An, An Giang, Việt Nam</p>
                 </div>
               </div>
 
@@ -47,7 +47,7 @@ export default function Footer() {
                 </div>
                 <div>
                   <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Hỗ trợ</p>
-                  <p className="font-bold text-gray-800">support@xetulaipq.com</p>
+                  <p className="font-bold text-gray-800">minhquang030@gmail.com</p>
                 </div>
               </div>
             </div>
@@ -129,18 +129,12 @@ export default function Footer() {
         <div className="border-t border-gray-100 py-8 flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="flex flex-col md:flex-row items-center gap-4">
             <p className="font-bold text-gray-500 text-xs">
-              &copy; {new Date().getFullYear()} CÔNG TY TNHH XÊ TU LÁI PHÚ QUỐC.
+              &copy; {new Date().getFullYear()} VF5 TỰ LÁI.
             </p>
             <div className="hidden md:block w-1.5 h-1.5 rounded-full bg-gray-300"></div>
             <p className="font-medium text-gray-500 text-xs">
-              Mã số thuế: 0123456789 do Sở Kế hoạch và Đầu tư Tỉnh Kiên Giang cấp.
+              Cho thuê xe điện tự lái tại Rạch Giá.
             </p>
-          </div>
-          <div className="flex gap-4">
-            {/* Payment Methods placeholders */}
-            <div className="h-8 w-12 bg-gray-100 rounded-md flex items-center justify-center text-[10px] font-bold text-gray-400 border">VISA</div>
-            <div className="h-8 w-12 bg-gray-100 rounded-md flex items-center justify-center text-[10px] font-bold text-gray-400 border">MASTER</div>
-            <div className="h-8 w-12 bg-gray-100 rounded-md flex items-center justify-center text-[10px] font-bold text-gray-400 border">MOMO</div>
           </div>
         </div>
       </div>

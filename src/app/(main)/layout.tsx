@@ -5,26 +5,27 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ZaloFloat from "@/components/ZaloFloat";
 
-const roboto = Roboto({ 
+const roboto = Roboto({
   weight: ['300', '400', '500', '700', '900'],
   subsets: ["vietnamese", "latin"],
+  variable: '--font-roboto',
   display: 'swap',
 });
 
 export const metadata: Metadata = {
   title: {
-    template: "%s | Xê Tu Lái - Thuê Xe Tự Lái",
-    default: "Xê Tu Lái - Thuê Xe Tự Lái Giá Rẻ, Đặt Xe Nhanh Chóng",
+    template: "%s | VF5 Tự Lái Rạch Giá - Cho thuê VF5 tự lái tại Rạch Giá",
+    default: "VF5 Tự Lái - Cho thuê VF5 tự lái tại Rạch Giá",
   },
-  description: "Dịch vụ cho thuê xe điện VinFast tự lái chất lượng, giá ưu đãi. Đặt xe nhanh chóng, thủ tục đơn giản. Trải nghiệm xe VF3, VF5, Limo Green ngay hôm nay.",
-  keywords: ["thuê xe điện", "thuê xe tự lái", "thuê xe vinfast", "thuê xe vf3", "thuê xe vf5", "giá thuê xe"],
+  description: "Dịch vụ cho thuê xe điện VinFast VF5 tự lái chất lượng, giá ưu đãi. Đặt xe nhanh chóng, thủ tục đơn giản tại Rạch Giá.",
+  keywords: ["thuê xe điện", "thuê xe tự lái", "thuê xe vinfast", "thuê xe vf5", "rạch giá"],
   openGraph: {
     type: "website",
     locale: "vi_VN",
-    url: "https://xetulaipq.com/",
-    title: "Xê Tu Lái - Thuê Xe Tự Lái Giá Rẻ",
-    description: "Cho thuê xe điện VinFast tự lái chất lượng, giá ưu đãi.",
-    siteName: "Xê Tu Lái",
+    url: "https://vf5tulairg.vercel.app",
+    title: "VF5 Tự Lái - Cho thuê VF5 tự lái tại Rạch Giá",
+    description: "Cho thuê xe điện VinFast VF5 tự lái chất lượng, giá ưu đãi.",
+    siteName: "VF5 Tự Lái",
   },
 };
 
@@ -35,11 +36,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="vi">
-      <body className={roboto.className}>
+      <body className={`${roboto.variable} font-sans`}>
         <Header />
         <main className="flex-grow pt-16">{children}</main>
         <Footer />
-        
+
         {/* Zalo CTA Float */}
         <ZaloFloat />
       </body>

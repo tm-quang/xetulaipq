@@ -64,7 +64,7 @@ export default async function PromotionDetailPage({ params }: { params: { slug: 
                 </p>
                 
                 <p>
-                  Thuê xe VinFast tại Phú Quốc chưa bao giờ tiết kiệm đến thế! Chương trình áp dụng cho tất cả khách hàng đăng ký sớm nhất trong khoảng thời gian diễn ra sự kiện. 
+                  Thuê xe VinFast tại Rạch Giá chưa bao giờ tiết kiệm đến thế! Chương trình áp dụng cho tất cả khách hàng đăng ký sớm nhất trong khoảng thời gian diễn ra sự kiện. 
                 </p>
 
                 <h3 className="text-xl font-black text-gray-900 mt-8 mb-4">Thể lệ chương trình:</h3>

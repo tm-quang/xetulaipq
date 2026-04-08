@@ -28,7 +28,7 @@ export default function CarDetailClient({ car }: { car: Car }) {
   const [voucherError, setVoucherError] = useState("");
 
   const locations = [
-    "Sân bay Phú Quốc",
+    "Sân bay Rạch Giá",
     "Cảng Bãi Vòng",
     "Cảng An Thới",
     "Vinpearl / Grand World",

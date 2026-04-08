@@ -23,7 +23,7 @@ export default function CarManagement() {
   );
 
   const handleOpenModal = (car: Car | null = null) => {
-    setCurrentCar(car || { name: "", price_per_day: 0, specs: { fuel: "Electric" } as any, available: true, images: [""] });
+    setCurrentCar(car || { name: "", price_per_day: 0, specs: { fuel: "Electric" } as unknown as Car["specs"], available: true, images: [""] });
     setIsModalOpen(true);
   };
 
@@ -167,7 +167,7 @@ export default function CarManagement() {
           <AdminSelect 
             label="Loại động cơ"
             value={currentCar?.specs?.fuel || "Electric"}
-            onChange={(e) => currentCar && setCurrentCar({...currentCar, specs: { ...currentCar.specs, fuel: e.target.value } as any})}
+            onChange={(e) => currentCar && setCurrentCar({...currentCar, specs: { ...currentCar.specs, fuel: e.target.value } as unknown as Car["specs"]})}
           >
             <option value="Electric">Xe điện (Electric)</option>
             <option value="Gasoline">Xe xăng (Gasoline)</option>

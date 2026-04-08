@@ -4,7 +4,7 @@ import { useState, useEffect, useMemo } from "react"
 import { createPortal } from "react-dom"
 import { motion, AnimatePresence } from "framer-motion"
 import { HiX, HiChevronDown } from "react-icons/hi"
-import { format, addMonths, startOfMonth, endOfMonth, eachDayOfInterval, isSameDay, isToday, startOfToday, isWithinInterval, parseISO } from "date-fns"
+import { format, startOfMonth, endOfMonth, eachDayOfInterval, isSameDay, startOfToday, isWithinInterval, parseISO } from "date-fns"
 import { vi } from "date-fns/locale"
 
 import { mockBookings, mockCarUnits } from "@/lib/data"
@@ -150,7 +150,7 @@ export default function DateTimePickerModal({
                   <span className="text-[13px]">{format(day, "d")}</span>
                   {!isPastDay && units.length > 0 && (
                     <div className="flex gap-0.5 mt-0.5">
-                      {units.map((u: any) => (
+                      {units.map((u: { id: string, color_code?: string }) => (
                         <div 
                           key={u.id} 
                           className={`w-1 h-1 rounded-full border border-white/20 shadow-sm ${isSelectedStart || isSelectedEnd ? 'bg-white' : ''}`}
@@ -166,7 +166,7 @@ export default function DateTimePickerModal({
                     <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-24 bg-gray-900 text-white text-[8px] p-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity z-50 pointer-events-none hidden sm:block">
                        <p className="font-black border-b border-white/10 pb-1 mb-1">CÒN {units.length} XE</p>
                        <div className="space-y-1">
-                          {units.map((u: any) => (
+                          {units.map((u: { id: string, color_code?: string, color?: string }) => (
                             <div key={u.id} className="flex items-center gap-1">
                               <div className="w-1 h-1 rounded-full" style={{ backgroundColor: u.color_code }} />
                               <span>Màu {u.color}</span>

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { mockUsers } from "@/lib/data";
-import { AdminCard, AdminTable, AdminBadge, AdminButton, AdminInput } from "@/components/admin/UI";
+import { AdminCard, AdminTable, AdminBadge, AdminButton } from "@/components/admin/UI";
 import { AdminModal, AdminConfirmModal } from "@/components/admin/Modal";
 import { 
   HiOutlineSearch, 
